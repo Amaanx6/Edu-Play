@@ -1,7 +1,8 @@
 // components/tabs/CodeTab.tsx
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Code2, Terminal, Rocket, ChevronRight, Clipboard, CheckCircle, AlertCircle } from 'lucide-react';
+import { Code2, Terminal,Book, Rocket, ChevronRight, Clipboard, CheckCircle, AlertCircle } from 'lucide-react';
+import { Navbar } from './Navbar';
 
 const CODE_CHALLENGES = [
   {
@@ -105,6 +106,7 @@ export const CodeTab = () => {
       animate={{ opacity: 1 }}
     >
       <div className="bg-slate-800/50 p-8 rounded-2xl border border-slate-700">
+      <Navbar title='Code Dojo' icon={Book}/>
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-2xl font-bold flex items-center gap-3">
             <Code2 className="h-8 w-8 text-blue-500" />

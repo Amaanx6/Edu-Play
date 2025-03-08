@@ -317,78 +317,19 @@ const TheoryTab = ({ summary }: { summary: typeof HARDCODED_SUMMARY }) => {
   );
 };
 
-const TabButton = ({ active, onClick, icon, label }: { 
-  active: boolean; 
-  onClick: () => void;
-  icon: React.ReactNode;
-  label: string;
-}) => (
-  <motion.button
-    onClick={onClick}
-    className={`flex items-center gap-3 px-8 py-4 rounded-2xl text-lg transition-colors ${
-      active 
-        ? 'bg-gradient-to-br from-purple-600 to-blue-600 shadow-lg' 
-        : 'bg-slate-800 hover:bg-slate-700'
-    }`}
-    whileHover={{ scale: 1.05 }}
-    whileTap={{ scale: 0.95 }}
-  >
-    {icon}
-    <span>{label}</span>
-  </motion.button>
-);
-
 export function SummaryComponent() {
-  const [activeTab, setActiveTab] = useState('theory');
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-950 p-8">
       <Navbar title='Theory Mastery' icon={Book}/>
-      <div className="max-w-7xl mx-auto space-y-8">
-        <div className="flex flex-wrap gap-4">
-          <TabButton
-            active={activeTab === 'theory'}
-            onClick={() => setActiveTab('theory')}
-            icon={<BookText className="h-6 w-6" />}
-            label="Theory Mastery"
-          />
-          <TabButton
-            active={activeTab === 'code'}
-            onClick={() => setActiveTab('code')}
-            icon={<Code2 className="h-6 w-6" />}
-            label="Code Dojo"
-          />
-          <TabButton
-            active={activeTab === 'competitive'}
-            onClick={() => setActiveTab('competitive')}
-            icon={<Trophy className="h-6 w-6" />}
-            label="Competitive Arena"
-          />
-          <TabButton
-            active={activeTab === 'quiz'}
-            onClick={() => setActiveTab('quiz')}
-            icon={<HelpCircle className="h-6 w-6" />}
-            label="Knowledge Check"
-          />
-          <TabButton
-            active={activeTab === 'resources'}
-            onClick={() => setActiveTab('resources')}
-            icon={<Codesandbox className="h-6 w-6" />}
-            label="Resource Hub"
-          />
-        </div>
-
-        <AnimatePresence mode='wait'>
+      <div className=" pt-2max-w-7xl mx-auto space-y-8">
+        <AnimatePresence>
           <motion.div
-            key={activeTab}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.2 }}
             className="bg-slate-800/30 backdrop-blur-lg rounded-2xl shadow-xl overflow-hidden"
           >
-            {activeTab === 'theory' && <TheoryTab summary={HARDCODED_SUMMARY} />}
-            {/* Add other tab components with same level of detail */}
+            <TheoryTab summary={HARDCODED_SUMMARY} />
           </motion.div>
         </AnimatePresence>
       </div>
