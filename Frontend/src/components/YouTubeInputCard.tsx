@@ -3,10 +3,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, WandSparkles, BrainCircuit, Trophy, Rocket, LockKeyhole } from 'lucide-react';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const GEMINI_API_KEY = 'AIzaSyAbi5TW_CQNk1s7eErTSLzxtJXGpr6BiA0';
 
 export const YouTubeLearningPortal = () => {
+  const navigate = useNavigate();
   const [url, setUrl] = useState('');
   const [summary, setSummary] = useState('');
   const [difficulty, setDifficulty] = useState('');
@@ -123,7 +125,7 @@ export const YouTubeLearningPortal = () => {
             />
             
             <motion.button
-              onClick={getVideoSummary}
+              onClick={() => navigate("/content")}
               disabled={isLoading}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
