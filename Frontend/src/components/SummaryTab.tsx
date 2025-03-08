@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   BookText,
+  Book,
   Code2,
   Trophy,
   HelpCircle,
@@ -15,6 +16,8 @@ import {
   Zap,
   Trophy as TrophyIcon
 } from 'lucide-react';
+
+import { Navbar } from './Navbar';
 
 const HARDCODED_SUMMARY = {
   title: "Mastering Arrays in C++",
@@ -340,6 +343,7 @@ export function SummaryComponent() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-950 p-8">
+      <Navbar title='Theory Mastery' icon={Book}/>
       <div className="max-w-7xl mx-auto space-y-8">
         <div className="flex flex-wrap gap-4">
           <TabButton
