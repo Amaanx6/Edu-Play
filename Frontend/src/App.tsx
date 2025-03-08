@@ -3,7 +3,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import {YouTubeLearningPortal} from "./components/YouTubeInputCard"
-import{SummaryComponent} from "./components/ArrayTheory"
+import{SummaryComponent} from "./components/SummaryTab"
 
 const App: React.FC = () => {
   return (
