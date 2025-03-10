@@ -8,6 +8,8 @@ import { CodeTab } from './components/CodeTab';
 import { CompetitiveTab } from './components/CompetitiveTab';
 import { QuizTab } from './components/QuizTab';
 import { ResourcesTab } from './components/ResourcesTab';
+import { MainLanding } from './components/Landing/Main-Landing';
+// import { Divide } from 'lucide-react';
 
 const App: React.FC = () => {
   return (
@@ -20,8 +22,7 @@ const App: React.FC = () => {
           <Route path="/cp" element={<CompetitiveTab />} />
           <Route path="/kc" element={<QuizTab />} />
           <Route path="/rh" element={<ResourcesTab />} />
-
-
+          <Route path="/landing" element={<MainLanding />} />
         </Routes>
         <ToastContainer position="top-right" autoClose={3000} />
       </div>
