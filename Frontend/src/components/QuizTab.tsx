@@ -1,6 +1,6 @@
 // components/tabs/QuizTab.tsx
 import { motion } from 'framer-motion';
-import { HelpCircle, BookOpen, Award } from 'lucide-react';
+import { BookOpen } from 'lucide-react';
 
 export const QuizTab = () => (
   <motion.div className="space-y-8">

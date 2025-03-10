@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Star, User, Quote, Sparkles } from 'lucide-react';
+import { Star, User, Quote } from 'lucide-react';
 
 export const Testimonials = () => {
   const testimonials = [

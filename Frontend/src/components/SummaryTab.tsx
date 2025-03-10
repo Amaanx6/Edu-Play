@@ -1,12 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  BookText,
   Book,
-  Code2,
-  Trophy,
-  HelpCircle,
-  Codesandbox,
   Check,
   Sparkles,
   BookMarked,
@@ -248,7 +243,7 @@ const TheoryTab = ({ summary }:{ summary: Summary }) => {
           </div>
 
           <div className="space-y-6">
-            {filteredSections.map((section, index) => {
+            {filteredSections.map((section) => {
               const originalIndex = summary.sections.indexOf(section);
               const isUnlocked = unlocked.has(originalIndex);
               const isViewed = viewedSections.has(originalIndex);

@@ -1,6 +1,6 @@
 // components/tabs/ResourcesTab.tsx
 import { motion } from 'framer-motion';
-import { Link2, FileText, Codesandbox } from 'lucide-react';
+import { Codesandbox } from 'lucide-react';
 
 export const ResourcesTab = () => (
   <motion.div className="space-y-8">
