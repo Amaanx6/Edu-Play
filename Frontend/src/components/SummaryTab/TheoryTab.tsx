@@ -1,8 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Check, Sparkles, BookMarked, Share2, AlertCircle, Clock, Zap, 
-  TrophyIcon, Search, BrainCircuit, Rocket, Atom, Network 
+  Check, Sparkles, BookMarked, Share2, Clock,  
+  TrophyIcon, Search, BrainCircuit,
 } from 'lucide-react';
 
 // Enhanced Progress Pill with floating particles
