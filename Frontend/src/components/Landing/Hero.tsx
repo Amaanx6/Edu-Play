@@ -1,7 +1,10 @@
 import { motion } from 'framer-motion';
 import { Gamepad2, Brain, Rocket } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export const Hero = () => {
+
+  const Navigate = useNavigate();
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -98,20 +101,14 @@ export const Hero = () => {
           >
             <motion.button
               variants={buttonVariants}
+              onClick={() => Navigate("/input")}
               whileHover="hover"
               whileTap="tap"
               className="px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full text-white font-semibold text-lg hover:shadow-lg hover:shadow-purple-500/50 transition-all duration-300"
             >
               Get Started Free
             </motion.button>
-            <motion.button
-              variants={buttonVariants}
-              whileHover="hover"
-              whileTap="tap"
-              className="px-8 py-4 bg-white/10 backdrop-blur-lg rounded-full text-white font-semibold text-lg hover:bg-white/20 transition-all duration-300"
-            >
-              Watch Demo
-            </motion.button>
+            
           </motion.div>
 
           <motion.div

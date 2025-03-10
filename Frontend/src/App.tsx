@@ -9,6 +9,8 @@ import { CompetitiveTab } from './components/CompetitiveTab';
 import { QuizTab } from './components/QuizTab';
 import { ResourcesTab } from './components/ResourcesTab';
 import { MainLanding } from './components/Landing/Main-Landing';
+import { TheoryTab } from './components/SummaryTab/TheoryTab';
+import { HARDCODED_SUMMARY } from './components/SummaryTab';
 // import { Divide } from 'lucide-react';
 
 const App: React.FC = () => {
@@ -16,13 +18,14 @@ const App: React.FC = () => {
     <Router>
       <div className="app-container">
         <Routes>
-          <Route path="/" element={<YouTubeLearningPortal />} />
+          <Route path="/" element={<MainLanding />} />
+          <Route path="/input" element={<YouTubeLearningPortal />} />
           <Route path="/content" element={<SummaryComponent />} />
+          <Route path="/content2" element={<TheoryTab summary={HARDCODED_SUMMARY}/>} />
           <Route path="/code" element={<CodeTab />} />
           <Route path="/cp" element={<CompetitiveTab />} />
           <Route path="/kc" element={<QuizTab />} />
           <Route path="/rh" element={<ResourcesTab />} />
-          <Route path="/landing" element={<MainLanding />} />
         </Routes>
         <ToastContainer position="top-right" autoClose={3000} />
       </div>

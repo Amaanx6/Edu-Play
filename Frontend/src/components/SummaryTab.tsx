@@ -418,10 +418,3 @@ export function SummaryComponent() {
     </div>
   );
 }
-
-// App wrapper for testing
-function App() {
-  return <SummaryComponent />;
-}
-
-export default App;
