@@ -19,7 +19,7 @@ export const YouTubeLearningPortal = () => {
     const regex = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
     return regex.test(url);
   };
-
+//@ts-ignore
   const getVideoSummary = async () => {
     if (!validateYouTubeUrl(url)) {
       toast.error('Please enter a valid YouTube URL');
