@@ -58,7 +58,7 @@ export const CodeTab = () => {
       const challenge = CODE_CHALLENGES[selectedChallenge];
       const userFunction = new Function('arr', `${code} return arr;`);
       
-      const results = challenge.testCases.map((testCase, index) => {
+      const results = challenge.testCases.map((testCase) => {
         try {
           const result = userFunction([...testCase.input]);
           const success = JSON.stringify(result) === JSON.stringify(testCase.output);
