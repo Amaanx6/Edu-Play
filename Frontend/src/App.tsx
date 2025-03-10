@@ -20,6 +20,8 @@ const App: React.FC = () => {
           <Route path="/cp" element={<CompetitiveTab />} />
           <Route path="/kc" element={<QuizTab />} />
           <Route path="/rh" element={<ResourcesTab />} />
+
+
         </Routes>
         <ToastContainer position="top-right" autoClose={3000} />
       </div>

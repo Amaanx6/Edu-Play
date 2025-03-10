@@ -19,7 +19,7 @@ import {
 
 import { Navbar } from './Navbar';
 
-const HARDCODED_SUMMARY = {
+export const HARDCODED_SUMMARY = {
   title: "Mastering Arrays in C++",
   duration: "52:45",
   sections: [
