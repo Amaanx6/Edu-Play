@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   BookText,
@@ -14,10 +14,29 @@ import {
   AlertCircle,
   Clock,
   Zap,
-  Trophy as TrophyIcon
+  Trophy as TrophyIcon,
+  Search
 } from 'lucide-react';
-
 import { Navbar } from './Navbar';
+interface Theory {
+  details: string;
+  badge: string;
+  points: number;
+  tips: string[];
+}
+
+interface Section {
+  time: string;
+  content: string;
+  theory: Theory;
+}
+
+interface Summary {
+  title: string;
+  duration: string;
+  sections: Section[];
+  keyTopics: string[];
+}
 
 const HARDCODED_SUMMARY = {
   title: "Mastering Arrays in C++",
@@ -118,38 +137,60 @@ const HARDCODED_SUMMARY = {
   ]
 };
 
-const ProgressPill = ({ value, max }: { value: number; max: number }) => (
-  <div className="relative h-8 bg-slate-700 rounded-full overflow-hidden w-64">
+
+
+const ProgressPill = ({ value, max }: any) => (
+  <div className="relative h-2 bg-slate-800 rounded-full overflow-hidden w-72 shadow-inner">
     <motion.div
-      className="absolute inset-0 bg-gradient-to-r from-purple-500 to-blue-500"
+      className="absolute inset-0 bg-gradient-to-r from-purple-600 via-blue-500 to-purple-600"
       initial={{ width: 0 }}
       animate={{ width: `${(value / max) * 100}%` }}
-      transition={{ duration: 0.8, type: 'spring' }}
+      transition={{ duration: 1, ease: "easeOut" }}
     />
-    <div className="absolute inset-0 flex items-center justify-center text-xs font-bold">
+    <div className="absolute inset-0 flex items-center justify-center text-xs font-medium text-white mix-blend-overlay">
       {value}/{max} Concepts Mastered
     </div>
   </div>
 );
 
-const AchievementBadge = ({ icon, text }: { icon: React.ReactNode; text: string }) => (
+const AchievementBadge = ({ icon, text }: any) => (
   <motion.div
-    initial={{ scale: 0 }}
-    animate={{ scale: 1 }}
-    className="flex items-center gap-2 bg-purple-500/20 px-4 py-2 rounded-full"
+    initial={{ scale: 0.8, opacity: 0 }}
+    animate={{ scale: 1, opacity: 1 }}
+    className="flex items-center gap-2 bg-gradient-to-r from-purple-600/20 to-blue-500/20 px-4 py-2 rounded-full border border-purple-500/30 shadow-lg"
   >
     {icon}
-    <span className="text-sm">{text}</span>
+    <span className="text-sm font-medium text-purple-200">{text}</span>
   </motion.div>
 );
 
-const TheoryTab = ({ summary }: { summary: typeof HARDCODED_SUMMARY }) => {
-  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
-  const [unlocked, setUnlocked] = useState<Set<number>>(new Set());
+const TheoryTab = ({ summary }:{ summary: Summary }) => {
+  const [expandedIndex, setExpandedIndex] = useState(null);
+  const [unlocked, setUnlocked] = useState(new Set());
   const [totalPoints, setTotalPoints] = useState(0);
-  const [viewedSections, setViewedSections] = useState<Set<number>>(new Set());
+  const [viewedSections, setViewedSections] = useState(new Set());
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showConfetti, setShowConfetti] = useState(false);
 
-  const handleSectionClick = (index: number) => {
+  // Load progress from localStorage
+  useEffect(() => {
+    const savedUnlocked = localStorage.getItem('unlockedSections');
+    const savedPoints = localStorage.getItem('totalPoints');
+    if (savedUnlocked) setUnlocked(new Set(JSON.parse(savedUnlocked)));
+    if (savedPoints) setTotalPoints(parseInt(savedPoints));
+  }, []);
+
+  // Save progress to localStorage
+  useEffect(() => {
+    localStorage.setItem('unlockedSections', JSON.stringify([...unlocked]));
+    localStorage.setItem('totalPoints', totalPoints.toString());
+    if (unlocked.size === summary.sections.length && !showConfetti) {
+      setShowConfetti(true);
+      setTimeout(() => setShowConfetti(false), 3000); // Confetti for 3 seconds
+    }
+  }, [unlocked, totalPoints, summary.sections.length]);
+
+  const handleSectionClick = (index:any) => {
     const newViewed = new Set(viewedSections);
     newViewed.add(index);
     setViewedSections(newViewed);
@@ -162,19 +203,25 @@ const TheoryTab = ({ summary }: { summary: typeof HARDCODED_SUMMARY }) => {
     setExpandedIndex(prev => prev === index ? null : index);
   };
 
+  const filteredSections = summary.sections.filter(section => 
+    section.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    section.theory.tips.some(tip => tip.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
+
   return (
-    <div className="space-y-8">
-      <div className="bg-slate-800 p-8 rounded-2xl shadow-xl">
-        <div className="flex flex-wrap gap-6 items-center justify-between mb-8">
+    <div className="space-y-8 p-8">
+      {/* <Navbar title='fuck you ziegler' icon={Book} /> */}
+      <div className="bg-slate-900/50 border border-slate-800 rounded-2xl shadow-2xl backdrop-blur-sm">
+        <div className="flex flex-wrap gap-6 items-center justify-between p-8 border-b border-slate-800">
           <div className="flex items-center gap-4">
-            <div className="p-4 bg-slate-900 rounded-xl">
-              <Zap className="h-8 w-8 text-purple-500" />
+            <div className="p-3 bg-gradient-to-br from-purple-600/20 to-blue-500/20 rounded-xl border border-purple-500/30">
+              <Zap className="h-8 w-8 text-purple-400" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold">{summary.title}</h1>
+              <h1 className="text-3xl font-bold text-white tracking-tight">{summary.title}</h1>
               <div className="flex items-center gap-2 mt-2 text-slate-400">
                 <Clock className="h-5 w-5" />
-                <span>Total Duration: {summary.duration}</span>
+                <span className="text-sm font-medium">{summary.duration}</span>
               </div>
             </div>
           </div>
@@ -188,146 +235,186 @@ const TheoryTab = ({ summary }: { summary: typeof HARDCODED_SUMMARY }) => {
           </div>
         </div>
 
-        <div className="space-y-4">
-          {summary.sections.map((section, index) => {
-            const isUnlocked = unlocked.has(index);
-            const isViewed = viewedSections.has(index);
-            
-            return (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="border border-slate-600 rounded-xl overflow-hidden"
-              >
-                <button
-                  onClick={() => handleSectionClick(index)}
-                  className={`w-full p-6 text-left flex items-start gap-6 transition-all ${
-                    expandedIndex === index 
-                      ? 'bg-slate-700' 
-                      : 'hover:bg-slate-800/50'
-                  } ${!isViewed ? 'border-2 border-purple-500/30' : ''}`}
+        <div className="p-6">
+          <div className="relative mb-6">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-purple-400" />
+            <input
+              type="text"
+              placeholder="Search sections or tips..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 bg-slate-800/50 border border-slate-700 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:border-purple-500"
+            />
+          </div>
+
+          <div className="space-y-6">
+            {filteredSections.map((section, index) => {
+              const originalIndex = summary.sections.indexOf(section);
+              const isUnlocked = unlocked.has(originalIndex);
+              const isViewed = viewedSections.has(originalIndex);
+              
+              return (
+                <motion.div
+                  key={originalIndex}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: originalIndex * 0.1 }}
+                  className="border border-slate-800 rounded-xl overflow-hidden shadow-md"
                 >
-                  <div className="flex flex-col items-center gap-2">
-                    <span className="text-purple-400 font-mono">
-                      {section.time}
-                    </span>
-                    {isUnlocked ? (
-                      <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                        <Check className="h-5 w-5 text-white" />
+                  <button
+                    onClick={() => handleSectionClick(originalIndex)}
+                    className={`w-full p-6 text-left flex items-start gap-6 transition-all ${
+                      expandedIndex === originalIndex 
+                        ? 'bg-gradient-to-r from-slate-800 to-slate-850' 
+                        : 'hover:bg-slate-800/50'
+                    } ${!isViewed ? 'border-2 border-purple-500/40' : ''}`}
+                  >
+                    <div className="flex flex-col items-center gap-2 relative group">
+                      <span className="text-purple-400 font-mono text-sm">
+                        {section.time}
+                      </span>
+                      <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-slate-900 border border-slate-700 text-white text-xs p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                        {section.theory.tips[0]}
                       </div>
-                    ) : (
-                      <AlertCircle className="h-8 w-8 text-yellow-500/50" />
-                    )}
-                  </div>
-                  
-                  <div className="flex-1">
-                    <h3 className="text-xl font-semibold mb-2">
-                      {section.content}
-                    </h3>
-                    {isUnlocked && (
-                      <div className="flex gap-2 flex-wrap">
-                        {section.theory.tips.map((tip, tipIndex) => (
-                          <span
-                            key={tipIndex}
-                            className="px-3 py-1 bg-slate-700 rounded-full text-sm"
+                      {isUnlocked ? (
+                        <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center shadow-lg">
+                          <Check className="h-5 w-5 text-white" />
+                        </div>
+                      ) : (
+                        <AlertCircle className="h-8 w-8 text-yellow-500/50" />
+                      )}
+                    </div>
+                    
+                    <div className="flex-1">
+                      <h3 className="text-xl font-semibold text-white mb-2">
+                        {section.content}
+                      </h3>
+                      {isUnlocked && (
+                        <div className="flex gap-2 flex-wrap">
+                          {section.theory.tips.map((tip, tipIndex) => (
+                            <span
+                              key={tipIndex}
+                              className="px-3 py-1 bg-slate-800/50 border border-slate-700 rounded-full text-sm text-slate-300"
+                            >
+                              {tip}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </button>
+
+                  <AnimatePresence>
+                    {expandedIndex === originalIndex && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="bg-slate-850/50 border-t border-slate-800"
+                      >
+                        <div className="p-6 pt-0 space-y-6">
+                          <motion.div
+                            initial={{ x: -20 }}
+                            animate={{ x: 0 }}
+                            className="flex items-center gap-4 bg-gradient-to-r from-purple-600/10 to-blue-500/10 p-4 rounded-lg border border-purple-500/20"
                           >
-                            {tip}
-                          </span>
-                        ))}
-                      </div>
+                            <Sparkles className="h-6 w-6 text-purple-400" />
+                            <div>
+                              <p className="text-purple-300 font-bold">
+                                {section.theory.badge}
+                              </p>
+                              <p className="text-sm text-purple-200">
+                                +{section.theory.points} XP Earned!
+                              </p>
+                            </div>
+                          </motion.div>
+
+                          <div className="grid gap-6 md:grid-cols-2">
+                            <div className="space-y-4">
+                              <h4 className="text-lg font-semibold text-white">Deep Dive</h4>
+                              <p className="text-slate-300 leading-relaxed text-sm">
+                                {section.theory.details}
+                              </p>
+                            </div>
+                            
+                            <div className="bg-slate-900/50 p-4 rounded-xl border border-slate-800 shadow-inner">
+                              <h4 className="text-lg font-semibold text-white mb-4">
+                                Pro Tips
+                              </h4>
+                              <ul className="space-y-3">
+                                {section.theory.tips.map((tip, tipIndex) => (
+                                  <li
+                                    key={tipIndex}
+                                    className="flex items-start gap-2"
+                                  >
+                                    <div className="w-6 h-6 bg-purple-500/10 rounded-full flex items-center justify-center flex-shrink-0">
+                                      <Check className="h-4 w-4 text-purple-400" />
+                                    </div>
+                                    <span className="text-slate-300 text-sm">{tip}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          </div>
+
+                          <div className="flex flex-wrap gap-4 border-t border-slate-800 pt-6">
+                            <button className="flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-slate-800 to-slate-900 hover:from-slate-700 hover:to-slate-800 rounded-xl transition-all border border-slate-700">
+                              <BookMarked className="h-5 w-5 text-purple-400" />
+                              <span className="text-white font-medium">Save</span>
+                            </button>
+                            <button className="flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-slate-800 to-slate-900 hover:from-slate-700 hover:to-slate-800 rounded-xl transition-all border border-slate-700">
+                              <Share2 className="h-5 w-5 text-purple-400" />
+                              <span className="text-white font-medium">Share</span>
+                            </button>
+                          </div>
+                        </div>
+                      </motion.div>
                     )}
-                  </div>
-                </button>
-
-                <AnimatePresence>
-                  {expandedIndex === index && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      className="bg-slate-800/50 overflow-hidden"
-                    >
-                      <div className="p-6 pt-0 space-y-6">
-                        <motion.div
-                          initial={{ x: -20 }}
-                          animate={{ x: 0 }}
-                          className="flex items-center gap-4 bg-gradient-to-r from-purple-500/20 to-transparent p-4 rounded-lg"
-                        >
-                          <Sparkles className="h-6 w-6 text-purple-400" />
-                          <div>
-                            <p className="text-purple-400 font-bold">
-                              {section.theory.badge}
-                            </p>
-                            <p className="text-sm text-purple-300">
-                              +{section.theory.points} XP Earned!
-                            </p>
-                          </div>
-                        </motion.div>
-
-                        <div className="grid gap-4 md:grid-cols-2">
-                          <div className="space-y-4">
-                            <h4 className="text-lg font-bold">Deep Dive</h4>
-                            <p className="text-slate-300 leading-relaxed">
-                              {section.theory.details}
-                            </p>
-                          </div>
-                          
-                          <div className="bg-slate-900 p-4 rounded-xl">
-                            <h4 className="text-lg font-bold mb-4">
-                              Pro Tips
-                            </h4>
-                            <ul className="space-y-3">
-                              {section.theory.tips.map((tip, tipIndex) => (
-                                <li
-                                  key={tipIndex}
-                                  className="flex items-start gap-2"
-                                >
-                                  <div className="w-6 h-6 bg-purple-500/20 rounded-full flex items-center justify-center flex-shrink-0">
-                                    <Check className="h-4 w-4 text-purple-400" />
-                                  </div>
-                                  <span className="text-slate-300">{tip}</span>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        </div>
-
-                        <div className="flex flex-wrap gap-4 border-t border-slate-700 pt-6">
-                          <button className="flex items-center gap-2 px-6 py-3 bg-slate-700 hover:bg-slate-600 rounded-xl transition-colors">
-                            <BookMarked className="h-5 w-5" />
-                            Save to Playlist
-                          </button>
-                          <button className="flex items-center gap-2 px-6 py-3 bg-slate-700 hover:bg-slate-600 rounded-xl transition-colors">
-                            <Share2 className="h-5 w-5" />
-                            Share Progress
-                          </button>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-            );
-          })}
+                  </AnimatePresence>
+                </motion.div>
+              );
+            })}
+          </div>
         </div>
       </div>
+
+      {/* Simple confetti effect */}
+      {showConfetti && (
+        <div className="fixed inset-0 pointer-events-none">
+          {Array.from({ length: 50 }).map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-2 h-2 bg-purple-500 rounded-full"
+              initial={{ 
+                x: Math.random() * window.innerWidth, 
+                y: -10 
+              }}
+              animate={{ 
+                y: window.innerHeight + 10,
+                rotate: Math.random() * 360
+              }}
+              transition={{ 
+                duration: Math.random() * 2 + 1,
+                ease: "linear"
+              }}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
 
 export function SummaryComponent() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-950 p-8">
-      <Navbar title='Theory Mastery' icon={Book}/>
-      <div className=" pt-2max-w-7xl mx-auto space-y-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white antialiased">
+      <Navbar title="Theory Mastery" icon={Book} />
+      <div className="pt-20 max-w-7xl mx-auto px-8 pb-12">
         <AnimatePresence>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.2 }}
-            className="bg-slate-800/30 backdrop-blur-lg rounded-2xl shadow-xl overflow-hidden"
+            transition={{ duration: 0.5, ease: "easeOut" }}
           >
             <TheoryTab summary={HARDCODED_SUMMARY} />
           </motion.div>
@@ -336,3 +423,10 @@ export function SummaryComponent() {
     </div>
   );
 }
+
+// App wrapper for testing
+function App() {
+  return <SummaryComponent />;
+}
+
+export default App;
