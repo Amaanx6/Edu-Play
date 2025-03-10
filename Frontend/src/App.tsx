@@ -8,6 +8,14 @@ import { CodeTab } from './components/CodeTab';
 import { CompetitiveTab } from './components/CompetitiveTab';
 import { QuizTab } from './components/QuizTab';
 import { ResourcesTab } from './components/ResourcesTab';
+// import { MainLanding } from './components/Landing/Main-Landing';
+import { Hero } from './components/Landing/Hero';
+import { Features } from './components/Landing/Features';
+import { Team } from './components/Landing/Team';
+import { Testimonials } from './components/Landing/Testimonial';
+import { Pricing } from './components/Landing/Pricing';
+import { Footer } from './components/Landing/Footer';
+// import { Divide } from 'lucide-react';
 
 const App: React.FC = () => {
   return (
@@ -20,6 +28,16 @@ const App: React.FC = () => {
           <Route path="/cp" element={<CompetitiveTab />} />
           <Route path="/kc" element={<QuizTab />} />
           <Route path="/rh" element={<ResourcesTab />} />
+          <Route path="/landing" element={
+             <>
+             <Hero />
+             <Features />
+             <Team />
+             <Testimonials />
+             <Pricing />
+             <Footer />
+             </>
+          } />
         </Routes>
         <ToastContainer position="top-right" autoClose={3000} />
       </div>
