@@ -132,7 +132,7 @@ export const Login = () => {
               href="#" 
               onClick={(e) => {
                 e.preventDefault();
-                navigate('/');
+                navigate('/signup');
               }}
               className="font-medium text-purple-400 hover:text-purple-300"
             >
