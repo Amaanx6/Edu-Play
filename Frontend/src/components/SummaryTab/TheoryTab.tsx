@@ -4,6 +4,8 @@ import {
   Check, Sparkles, BookMarked, Share2, Clock,  
   TrophyIcon, Search, BrainCircuit,
 } from 'lucide-react';
+import { Navbar } from '../Navbar';
+
 
 // Enhanced Progress Pill with floating particles
 const ProgressPill = ({ value, max }: { value: number; max: number }) => {
@@ -179,7 +181,9 @@ export const TheoryTab = ({ summary }: any) => {
   
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 to-slate-900 p-8">
+      
       <div className="max-w-7xl mx-auto space-y-8">
+      <Navbar title='Theory Mastery' icon={Sparkles} />
         {/* Floating Header */}
         <motion.div
           initial={{ y: -50, opacity: 0 }}
