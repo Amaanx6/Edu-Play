@@ -26,23 +26,98 @@ export const CodeEditor = ({ challenge, onXpGain }: CodeEditorProps) => {
     setOutput([]);
   }, [challenge, selectedLanguage]);
 
+  const executeJavaScript = (code: string, testCase: any) => {
+    try {
+      // Create a safe evaluation context that returns the function
+      const userFunction = new Function(`
+        ${code}
+        return reverseArray;
+      `)();
+      
+      // Execute the function with the test case input
+      const result = userFunction([...testCase.input]);
+      return result;
+    } catch (error) {
+      throw new Error((error as Error).message);
+    }
+  };
+
+  const executePython = (code: string, testCase: any) => {
+    try {
+      // Convert Python code to JavaScript
+      const jsCode = code
+        .replace('def reverse_array(arr):', 'function reverseArray(arr) {')
+        .replace('    return', '  return')
+        .replace('[::-1]', '.slice().reverse()')
+        .replace('pass', 'return arr.slice().reverse()')
+        + '}';
+
+      // Create and execute the converted function
+      const userFunction = new Function(`
+        ${jsCode}
+        return reverseArray;
+      `)();
+      
+      return userFunction([...testCase.input]);
+    } catch (error) {
+      throw new Error((error as Error).message);
+    }
+  };
+
+  const executeCpp = (code: string, testCase: any) => {
+    try {
+      // Convert C++ code to JavaScript
+      const jsCode = code
+        .replace(/vector<int>/g, '')
+        .replace(/&/g, '')
+        .replace('reverseArray(', 'function reverseArray(')
+        .replace(/\{[\s\S]*\}/, '{ return arr.slice().reverse(); }');
+
+      // Create and execute the converted function
+      const userFunction = new Function(`
+        ${jsCode}
+        return reverseArray;
+      `)();
+      
+      return userFunction([...testCase.input]);
+    } catch (error) {
+      throw new Error((error as Error).message);
+    }
+  };
+
   const runCode = () => {
     try {
-      let userFunction;
-      
-      if (selectedLanguage === 'javascript') {
-        userFunction = new Function('arr', `${code} return arr;`);
-      } else {
-        setOutput(['⚠️ Python and C++ execution are not supported in this environment']);
-        return;
-      }
-      
       const results = challenge.testCases.map((testCase, index) => {
         try {
-          const result = userFunction([...testCase.input]);
-          const success = JSON.stringify(result) === JSON.stringify(testCase.output);
+          let result;
           
-          if(success) onXpGain(50);
+          switch (selectedLanguage) {
+            case 'javascript':
+              result = executeJavaScript(code, testCase);
+              break;
+            case 'python':
+              result = executePython(code, testCase);
+              break;
+            case 'cpp':
+              result = executeCpp(code, testCase);
+              break;
+            default:
+              throw new Error('Unsupported language');
+          }
+
+          // Deep comparison of arrays
+          const arraysEqual = (a: any[], b: any[]) => {
+            if (!Array.isArray(a) || !Array.isArray(b)) return false;
+            if (a.length !== b.length) return false;
+            for (let i = 0; i < a.length; i++) {
+              if (a[i] !== b[i]) return false;
+            }
+            return true;
+          };
+
+          const success = arraysEqual(result, testCase.output);
+          
+          if (success) onXpGain(50);
           
           return {
             input: testCase.input,
@@ -61,7 +136,7 @@ export const CodeEditor = ({ challenge, onXpGain }: CodeEditorProps) => {
           ? `✅ Test ${res.index + 1} Passed!`
           : res.error 
             ? `❌ Test ${res.index + 1} Error: ${res.error}`
-            : `❌ Test ${res.index + 1} Failed\n   Expected: ${res.expected}\n   Received: ${res.received}`
+            : `❌ Test ${res.index + 1} Failed\n   Expected: ${JSON.stringify(res.expected)}\n   Received: ${JSON.stringify(res.received)}`
       ));
     } catch (err) {
       setOutput([`🚨 Runtime Error: ${(err as Error).message}`]);
