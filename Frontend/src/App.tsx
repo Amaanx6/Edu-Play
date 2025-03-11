@@ -18,9 +18,9 @@ const App: React.FC = () => {
     <Router>
       <div className="app-container">
         <Routes>
-          <Route path="/" element={<Signup />} />
+          <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/Landing" element={<MainLanding />} />
+          <Route path="/" element={<MainLanding />} />
           <Route path="/input" element={<YouTubeLearningPortal />} />
           <Route path="/content" element={<SummaryComponent />} />
           <Route path="/content2" element={<TheoryTab summary={HARDCODED_SUMMARY} />} />
