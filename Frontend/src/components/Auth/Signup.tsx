@@ -128,20 +128,21 @@ export const Signup = () => {
         password: formData.password
       });
 
-      if (response.data.success) {
+      // Check for 200 status code as successful response
+      if (response.status === 200) {
         // Show success message
         toast.success('Account created successfully!');
         
         // Redirect to login after a short delay
         setTimeout(() => {
-          navigate('/signin');
+          navigate('/login');
         }, 1500);
       } else {
-        setError(response.data.message || 'Signup failed. Please try again.');
+        setError(response.data.msg || 'Signup failed. Please try again.');
       }
     } catch (err: any) {
       console.error('Signup error:', err);
-      setError(err.response?.data?.message || 'An error occurred. Please try again.');
+      setError(err.response?.data?.msg || 'An error occurred. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -183,7 +184,7 @@ export const Signup = () => {
               href="#" 
               onClick={(e) => {
                 e.preventDefault();
-                navigate('/signin');
+                navigate('/login');
               }}
               className="font-medium text-purple-400 hover:text-purple-300"
             >
@@ -363,4 +364,3 @@ export const Signup = () => {
     </div>
   );
 };
-

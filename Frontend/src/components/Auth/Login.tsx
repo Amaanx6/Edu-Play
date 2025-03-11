@@ -7,7 +7,7 @@ import axios from 'axios';
 import { Eye, EyeOff, LogIn, AlertCircle } from 'lucide-react';
 
 export const Login = () => {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -61,7 +61,7 @@ export const Login = () => {
     setError('');
     
     // Basic validation
-    if (!email || !password) {
+    if (!username || !password) {
       setError('Please fill in all fields');
       return;
     }
@@ -70,7 +70,7 @@ export const Login = () => {
 
     try {
       const response = await axios.post('https://eduplaybackend.vercel.app/Login', {
-        email,
+        username,
         password
       });
 
@@ -83,7 +83,7 @@ export const Login = () => {
         
         // Redirect after a short delay
         setTimeout(() => {
-          navigate('/dashboard');
+          navigate('/landing');
         }, 1500);
       } else {
         setError(response.data.message || 'Login failed. Please try again.');
@@ -132,7 +132,7 @@ export const Login = () => {
               href="#" 
               onClick={(e) => {
                 e.preventDefault();
-                navigate('/signup');
+                navigate('/');
               }}
               className="font-medium text-purple-400 hover:text-purple-300"
             >
@@ -155,19 +155,19 @@ export const Login = () => {
         <motion.form variants={itemVariants} className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm space-y-4">
             <motion.div variants={itemVariants}>
-              <label htmlFor="email-address" className="block text-sm font-medium text-gray-300 mb-1">
-                Email address
+              <label htmlFor="username" className="block text-sm font-medium text-gray-300 mb-1">
+                Username
               </label>
               <input
-                id="email-address"
-                name="email"
-                type="email"
-                autoComplete="email"
+                id="username"
+                name="username"
+                type="text"
+                autoComplete="username"
                 required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 className="appearance-none relative block w-full px-3 py-3 border border-gray-600 placeholder-gray-500 text-white rounded-lg bg-gray-800/50 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                placeholder="Email address"
+                placeholder="Username"
               />
             </motion.div>
             
@@ -247,4 +247,3 @@ export const Login = () => {
     </div>
   );
 };
-
