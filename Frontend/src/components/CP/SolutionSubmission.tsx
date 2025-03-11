@@ -9,6 +9,7 @@ export const SolutionSubmission = () => {
   const [testCases, setTestCases] = useState([
     { input: '[1, 2, 2, 3]', expected: '[1, 2, 3]', passed: false },
     { input: '[5, 4, 3, 3]', expected: '[3, 4, 5]', passed: false },
+    { input: '[7, 1, 7, 2, 3]', expected: '[1, 2, 3, 7]', passed: false },
   ]);
 
   const handleSubmit = async () => {
@@ -29,58 +30,63 @@ export const SolutionSubmission = () => {
 
   return (
     <motion.div
-      className="bg-slate-800/30 p-6 rounded-xl border border-slate-700"
       initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.4 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="p-8 rounded-2xl bg-white/10 backdrop-blur-lg border border-white/20 hover:bg-white/20 transition-all duration-300"
     >
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-3">
-          <LockKeyhole className="h-6 w-6 text-green-500" />
-          <h3 className="text-xl font-semibold">Submit Solution</h3>
+      <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center gap-4">
+          <LockKeyhole className="h-8 w-8 text-green-400" />
+          <h3 className="text-2xl font-semibold text-white">Submit Solution</h3>
         </div>
         {result && (
           <motion.div
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
-            className={`flex items-center gap-2 ${
-              result === 'success' ? 'text-green-500' : 'text-red-500'
+            className={`flex items-center gap-3 ${
+              result === 'success' ? 'text-green-400' : 'text-red-400'
             }`}
           >
             {result === 'success' ? (
-              <CheckCircle className="h-5 w-5" />
+              <CheckCircle className="h-6 w-6" />
             ) : (
-              <XCircle className="h-5 w-5" />
+              <XCircle className="h-6 w-6" />
             )}
-            <span>{result === 'success' ? 'All tests passed!' : 'Some tests failed'}</span>
+            <span className="text-lg font-semibold">
+              {result === 'success' ? 'All tests passed!' : 'Some tests failed'}
+            </span>
           </motion.div>
         )}
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-6">
         <textarea
           value={solution}
           onChange={(e) => setSolution(e.target.value)}
-          className="w-full h-48 p-4 bg-slate-900 rounded-xl font-mono text-sm resize-none focus:outline-none focus:ring-2 focus:ring-purple-500"
+          className="w-full h-48 p-6 bg-slate-900/50 rounded-xl font-mono text-sm resize-none focus:outline-none focus:ring-2 focus:ring-purple-400 border border-white/10 text-white"
           placeholder="Write your solution here..."
         />
 
-        <div className="space-y-3">
-          <h4 className="font-semibold text-slate-300">Test Cases</h4>
-          <div className="space-y-2">
+        <div className="space-y-4">
+          <h4 className="text-xl font-semibold text-white">Test Cases</h4>
+          <div className="grid gap-3">
             {testCases.map((test, index) => (
-              <div
+              <motion.div
                 key={index}
-                className="flex items-center justify-between p-3 bg-slate-900 rounded-lg text-sm"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.1 }}
+                className="flex items-center justify-between p-4 bg-slate-900/50 rounded-xl border border-white/10"
               >
-                <div className="space-x-2">
-                  <span className="text-slate-400">Input:</span>
-                  <code className="text-slate-300">{test.input}</code>
-                  <span className="text-slate-400">Expected:</span>
-                  <code className="text-slate-300">{test.expected}</code>
+                <div className="space-x-4 text-gray-300">
+                  <span className="text-gray-400">Input:</span>
+                  <code className="text-white">{test.input}</code>
+                  <span className="text-gray-400">Expected:</span>
+                  <code className="text-white">{test.expected}</code>
                 </div>
                 {test.passed !== null && (
-                  <div className={test.passed ? 'text-green-500' : 'text-red-500'}>
+                  <div className={test.passed ? 'text-green-400' : 'text-red-400'}>
                     {test.passed ? (
                       <CheckCircle className="h-5 w-5" />
                     ) : (
@@ -88,7 +94,7 @@ export const SolutionSubmission = () => {
                     )}
                   </div>
                 )}
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -96,10 +102,10 @@ export const SolutionSubmission = () => {
         <motion.button
           onClick={handleSubmit}
           disabled={isSubmitting}
-          className={`w-full py-3 rounded-xl flex items-center justify-center gap-2 ${
+          className={`w-full py-4 rounded-xl flex items-center justify-center gap-3 text-lg font-semibold ${
             isSubmitting
-              ? 'bg-slate-700 cursor-not-allowed'
-              : 'bg-purple-600 hover:bg-purple-700'
+              ? 'bg-slate-700/50 cursor-not-allowed'
+              : 'bg-gradient-to-r from-purple-400 to-pink-600 hover:opacity-90'
           }`}
           whileHover={!isSubmitting ? { scale: 1.02 } : {}}
           whileTap={!isSubmitting ? { scale: 0.98 } : {}}

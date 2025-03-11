@@ -21,18 +21,18 @@ export const Timer = () => {
 
   return (
     <motion.div
-      className="bg-slate-800/30 p-6 rounded-xl border border-slate-700"
       initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+      whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
+      className="p-8 rounded-2xl bg-white/10 backdrop-blur-lg border border-white/20 hover:bg-white/20 transition-all duration-300"
     >
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <TimerIcon className="h-6 w-6 text-blue-500" />
-          <h3 className="text-xl font-semibold">Time Remaining</h3>
+        <div className="flex items-center gap-4">
+          <TimerIcon className="h-8 w-8 text-blue-400" />
+          <h3 className="text-2xl font-semibold text-white">Time Remaining</h3>
         </div>
         <motion.div
-          className={`text-3xl font-mono ${timeLeft <= 120 ? 'text-red-500' : 'text-white'}`}
+          className={`text-4xl font-mono ${timeLeft <= 120 ? 'text-red-400' : 'text-white'}`}
           animate={{
             scale: timeLeft <= 120 ? [1, 1.1, 1] : 1,
           }}
@@ -46,10 +46,10 @@ export const Timer = () => {
         <motion.div
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
-          className="mt-4 flex items-center gap-2 text-red-400 text-sm"
+          className="mt-6 flex items-center gap-3 text-red-400"
         >
-          <AlertTriangle className="h-4 w-4" />
-          <span>Less than 2 minutes remaining!</span>
+          <AlertTriangle className="h-5 w-5" />
+          <span className="text-lg">Time is running out! Complete your solution quickly.</span>
         </motion.div>
       )}
     </motion.div>
