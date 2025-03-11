@@ -139,7 +139,7 @@ export const ProblemStatement = () => {
         </div>
 
         <div className="relative mt-6">
-          <pre className="p-6 bg-slate-900/50 rounded-xl text-sm font-mono overflow-x-auto border border-white/10">
+          <pre className="p-6 bg-slate-900/50 rounded-xl text-sm font-mono overflow-x-auto border border-white/10 text-white">
             {codeTemplate}
           </pre>
           <button

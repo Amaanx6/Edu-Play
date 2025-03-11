@@ -1,13 +1,16 @@
-import { Trophy } from 'lucide-react';
+import { Trophy, Sword } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Timer } from './Timer';
 import { ProblemStatement } from './ProblemStatement';
 import { SolutionSubmission } from './SolutionSubmission';
+import { Navbar } from '../Navbar';
 
 export const CompetitiveArena = () => {
   return (
     <section className="relative py-12 overflow-hidden bg-slate-900">
+        
       <div className="container mx-auto px-6">
+      <Navbar title='Competative Arena' icon={Sword} />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
