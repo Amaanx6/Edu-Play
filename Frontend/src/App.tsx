@@ -11,6 +11,7 @@ import { HARDCODED_SUMMARY } from './components/SummaryTab';
 import { MainQuiz } from './components/Knowledge-Check/MainQuiz';
 import { MainResources } from './components/Resources/MainResources';
 import { CodePlayground } from './components/CodeDojo/Codeplayground';
+import { CompetitiveArena } from './components/CP/CompetativeArena';
 
 const App: React.FC = () => {
   return (
@@ -23,7 +24,7 @@ const App: React.FC = () => {
           <Route path="/content2" element={<TheoryTab summary={HARDCODED_SUMMARY} />} />
           <Route path="/code" element={<CodePlayground />} />
           {/* <Route path="/code" element={<CodeTab />} /> */}
-          <Route path="/cp" element={<CompetitiveTab />} />
+          <Route path="/cp" element={<CompetitiveArena />} />
           <Route path="/kc" element={<MainQuiz />} />
           <Route path="/rh" element={<MainResources />} />
         </Routes>

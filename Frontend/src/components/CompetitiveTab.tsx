@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Trophy, Timer, LockKeyhole, Zap } from 'lucide-react';
+import { Navbar } from './Navbar';
 
 export const CompetitiveTab = () => {
   const [timeLeft, setTimeLeft] = useState(600); // 10 minutes
@@ -17,6 +18,7 @@ export const CompetitiveTab = () => {
   return (
     <motion.div className="space-y-8">
       <div className="bg-slate-800/50 p-8 rounded-2xl border border-slate-700">
+      <Navbar title='CP' icon={Trophy} />
         <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
           <Trophy className="h-8 w-8 text-yellow-500" />
           <span>Competitive Arena</span>
