@@ -10,13 +10,17 @@ import { MainQuiz } from './components/Knowledge-Check/MainQuiz';
 import { MainResources } from './components/Resources/MainResources';
 import { CodePlayground } from './components/CodeDojo/Codeplayground';
 import { CompetitiveArena } from './components/CP/CompetativeArena';
+import { Signup } from './components/Auth/Signup';
+import { Login } from './components/Auth/Login';
 
 const App: React.FC = () => {
   return (
     <Router>
       <div className="app-container">
         <Routes>
-          <Route path="/" element={<MainLanding />} />
+          <Route path="/" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/Landing" element={<MainLanding />} />
           <Route path="/input" element={<YouTubeLearningPortal />} />
           <Route path="/content" element={<SummaryComponent />} />
           <Route path="/content2" element={<TheoryTab summary={HARDCODED_SUMMARY} />} />
