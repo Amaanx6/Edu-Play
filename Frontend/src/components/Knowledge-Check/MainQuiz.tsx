@@ -1,15 +1,12 @@
-// components/knowledge-check/MainQuiz.tsx
 import { QuizProvider } from './QuizContext';
-import DifficultySelector from './DifficultySelector'; // Default import
-import Quiz from './Quiz'; // Default import
-import { Navbar } from '../Navbar'; // Named import
+import DifficultySelector from './DifficultySelector'; 
+import Quiz from './Quiz'; 
+import { Navbar } from '../Navbar'; 
 import { useQuiz } from './QuizContext';
-import { Brain } from 'lucide-react'; // Importing a Lucide icon for the Navbar
+import { Brain } from 'lucide-react'; 
 
 const QuizContent = () => {
   const { difficulty } = useQuiz();
-  
-  // Render DifficultySelector if no difficulty is selected, otherwise render Quiz
   return difficulty ? <Quiz /> : <DifficultySelector />;
 };
 
@@ -18,8 +15,8 @@ export const MainQuiz = () => {
     <QuizProvider>
       <div className="flex flex-col h-screen overflow-hidden">
         <Navbar 
-          title="Knowledge Check Quiz" // String prop for title
-          icon={Brain} // Passing a Lucide icon component (React.ElementType)
+          title="Quiz" 
+          icon={Brain} 
         />
         <main className="flex-grow overflow-hidden">
           <QuizContent />
