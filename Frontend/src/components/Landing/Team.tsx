@@ -4,19 +4,19 @@ import { Linkedin, Twitter, User } from 'lucide-react';
 export const Team = () => {
   const teamMembers = [
     {
-      name: 'Mohammad Sarwar Khan',
+      name: 'Md Mubashiruddin',
       role: 'Team Lead',
-      bio: "Driving technical excellence in full-stack development, specializing in scalable MERN solutions and system architecture design.",
-      social: { linkedin: '#', twitter: '#' },
+      bio: "Expert in implementing complex features and maintaining code quality through rigorous development practices.",
+      social: { linkedin: 'https://www.linkedin.com/in/md-mubashiruddin/', twitter: 'https://x.com/amaanx_6' },
       leadership: true,
       icon: <User className="w-12 h-12 text-white" />, // Male icon
       color: "from-blue-600 to-indigo-500" // Blue-toned gradient for male
     },
     {
-      name: 'Md Mubashiruddin',
+      name: 'Mohammad Sarwar Khan',
       role: 'Lead Developer',
-      bio: 'Expert in implementing complex features and maintaining code quality through rigorous development practices.',
-      social: { linkedin: '#', twitter: '#' },
+      bio: 'Driving technical excellence in full-stack development, specializing in scalable MERN solutions and system architecture design.',
+      social: { linkedin: 'https://www.linkedin.com/in/mohammed-sarwar-khan/', twitter: 'https://x.com/mohfazam' },
       icon: <User className="w-12 h-12 text-white" />, // Male icon
       color: "from-blue-500 to-cyan-500" // Slightly different blue gradient for male
     },
@@ -24,7 +24,7 @@ export const Team = () => {
       name: 'Kafia Kauser',
       role: 'Researcher and Presenter',
       bio: 'Spearheading technology research and innovation strategies for cutting-edge solutions.',
-      social: { linkedin: '#', twitter: '#' },
+      social: { linkedin: 'https://www.linkedin.com/in/kafia-kauser-019647294', twitter: 'https://x.com/KauserKafia' },
       icon: <User className="w-12 h-12 text-white" />, // Female icon
       color: "from-pink-500 to-rose-500" // Pink-toned gradient for female
     },
@@ -32,7 +32,7 @@ export const Team = () => {
       name: 'Madiyah Numa',
       role: 'Quality Assurance',
       bio: 'Ensuring flawless user experiences through meticulous testing and quality control processes.',
-      social: { linkedin: '#', twitter: '#' },
+      social: { linkedin: 'https://www.linkedin.com/in/madiyah-numa-2903aa2a6', twitter: 'https://x.com/mnuma0_0' },
       icon: <User className="w-12 h-12 text-white" />, // Female icon
       color: "from-rose-600 to-pink-400" // Slightly different pink gradient for female
     },
