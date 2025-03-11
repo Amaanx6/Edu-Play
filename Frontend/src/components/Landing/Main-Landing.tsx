@@ -4,7 +4,6 @@ import { Team } from "./Team";
 import { Features } from "./Features";
 import { Navbar } from "../Navbar";
 import {Home} from 'lucide-react'
-// import { Testimonials } from "./Testimonial";
 
 export function MainLanding() {
   return (
