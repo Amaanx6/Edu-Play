@@ -25,7 +25,7 @@ export const CodePlayground = () => {
 
   return (
     <div className="min-h-screen bg-slate-900 text-white p-8">
-        <Navbar title='Code Dojo' icon={Book}/>
+      <Navbar title='Code Dojo' icon={Book}/>
       <motion.div 
         className="max-w-7xl mx-auto space-y-8"
         initial={{ opacity: 0, y: 20 }}
