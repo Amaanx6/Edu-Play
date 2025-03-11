@@ -21,7 +21,6 @@ const App: React.FC = () => {
           <Route path="/input" element={<YouTubeLearningPortal />} />
           <Route path="/content" element={<SummaryComponent />} />
           <Route path="/content2" element={<TheoryTab summary={HARDCODED_SUMMARY} />} />
-          {}
           <Route path="/code" element={<CodeTab />} />
           <Route path="/cp" element={<CompetitiveTab />} />
           <Route path="/kc" element={<MainQuiz />} />
