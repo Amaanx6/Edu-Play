@@ -1,178 +1,134 @@
 import { motion } from 'framer-motion';
-import { Code2, Palette, Rocket, Brain, Github, Twitter, Linkedin } from 'lucide-react';
+import { Linkedin, Twitter, User } from 'lucide-react';
 
 export const Team = () => {
-  const team = [
+  const teamMembers = [
     {
-      name: "Sarah Johnson",
-      role: "CEO & Founder",
-      icon: <Rocket className="w-12 h-12" />,
-      color: "from-purple-500 to-pink-500",
-      social: {
-        twitter: "#",
-        linkedin: "#",
-        github: "#"
-      }
+      name: 'Md Mubashiruddin',
+      role: 'Team Lead',
+      bio: "Expert in implementing complex features and maintaining code quality through rigorous development practices.",
+      social: { linkedin: 'https://www.linkedin.com/in/md-mubashiruddin/', twitter: 'https://x.com/amaanx_6' },
+      leadership: true,
+      icon: <User className="w-12 h-12 text-white" />, // Male icon
+      color: "from-blue-600 to-indigo-500" // Blue-toned gradient for male
     },
     {
-      name: "Michael Chen",
-      role: "CTO",
-      icon: <Brain className="w-12 h-12" />,
-      color: "from-blue-500 to-cyan-500",
-      social: {
-        twitter: "#",
-        linkedin: "#",
-        github: "#"
-      }
+      name: 'Mohammad Sarwar Khan',
+      role: 'Lead Developer',
+      bio: 'Driving technical excellence in full-stack development, specializing in scalable MERN solutions and system architecture design.',
+      social: { linkedin: 'https://www.linkedin.com/in/mohammed-sarwar-khan/', twitter: 'https://x.com/mohfazam' },
+      icon: <User className="w-12 h-12 text-white" />, // Male icon
+      color: "from-blue-500 to-cyan-500" // Slightly different blue gradient for male
     },
     {
-      name: "Emily Rodriguez",
-      role: "Head of Design",
-      icon: <Palette className="w-12 h-12" />,
-      color: "from-pink-500 to-rose-500",
-      social: {
-        twitter: "#",
-        linkedin: "#",
-        github: "#"
-      }
+      name: 'Kafia Kauser',
+      role: 'Researcher and Presenter',
+      bio: 'Spearheading technology research and innovation strategies for cutting-edge solutions.',
+      social: { linkedin: 'https://www.linkedin.com/in/kafia-kauser-019647294', twitter: 'https://x.com/KauserKafia' },
+      icon: <User className="w-12 h-12 text-white" />, // Female icon
+      color: "from-pink-500 to-rose-500" // Pink-toned gradient for female
     },
     {
-      name: "David Kim",
-      role: "Lead Developer",
-      icon: <Code2 className="w-12 h-12" />,
-      color: "from-green-500 to-emerald-500",
-      social: {
-        twitter: "#",
-        linkedin: "#",
-        github: "#"
-      }
-    }
+      name: 'Madiyah Numa',
+      role: 'Quality Assurance',
+      bio: 'Ensuring flawless user experiences through meticulous testing and quality control processes.',
+      social: { linkedin: 'https://www.linkedin.com/in/madiyah-numa-2903aa2a6', twitter: 'https://x.com/mnuma0_0' },
+      icon: <User className="w-12 h-12 text-white" />, // Female icon
+      color: "from-rose-600 to-pink-400" // Slightly different pink gradient for female
+    },
   ];
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
+  const textGlow = {
+    hidden: { textShadow: "0 0 0px rgba(59, 130, 246, 0)" },
     visible: {
-      opacity: 1,
+      textShadow: "0 0 12px rgba(59, 130, 246, 0.3)",
       transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.3
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.8,
-        ease: "easeOut"
+        duration: 1.5,
+        repeat: Infinity,
+        repeatType: "reverse" as const // Explicitly type as "reverse"
       }
     }
   };
 
   return (
-    <section className="relative py-20 flex items-center justify-center overflow-hidden">
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-violet-900 via-slate-900 to-black"></div>
-      
-      {/* Animated circles */}
-      <div className="absolute inset-0 overflow-hidden">
+    <div className="relative w-full min-h-screen bg-gray-900">
+      <div className="relative z-10 container mx-auto px-4 py-20">
+        {/* Animated Header */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ 
-            opacity: [0.1, 0.2, 0.1],
-            scale: [1, 1.2, 1],
-            rotate: [0, 90, 0]
-          }}
-          transition={{ 
-            duration: 8,
-            repeat: Infinity,
-            repeatType: "reverse"
-          }}
-          className="absolute w-96 h-96 bg-purple-500 rounded-full filter blur-3xl -top-20 -left-20"
-        />
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ 
-            opacity: [0.1, 0.2, 0.1],
-            scale: [1, 1.2, 1],
-            rotate: [0, -90, 0]
-          }}
-          transition={{ 
-            duration: 8,
-            repeat: Infinity,
-            repeatType: "reverse",
-            delay: 4
-          }}
-          className="absolute w-96 h-96 bg-blue-500 rounded-full filter blur-3xl -bottom-20 -right-20"
-        />
-      </div>
-
-      <div className="container mx-auto px-6 relative z-10">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="text-center mb-16"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-16 space-y-4"
         >
-          <motion.div variants={itemVariants}>
-            <h2 className="text-5xl md:text-6xl font-bold text-white mb-6">
-              Meet Our
-              <span className="bg-gradient-to-r from-purple-400 to-pink-600 text-transparent bg-clip-text"> Team</span>
-            </h2>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-              Passionate experts dedicated to revolutionizing education through technology and innovation.
-            </p>
-          </motion.div>
+          <motion.h1
+            initial="hidden"
+            whileInView="visible"
+            variants={textGlow}
+            className="text-4xl md:text-5xl font-bold text-white"
+          >
+            Cipher Syndicate
+          </motion.h1>
+          <p className="text-xl text-gray-400">Unified Excellence in Technical Innovation</p>
         </motion.div>
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto"
-        >
-          {team.map((member, index) => (
+        {/* Team Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {teamMembers.map((member, index) => (
             <motion.div
               key={index}
-              variants={itemVariants}
-              className="group relative"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.15, duration: 0.5 }}
+              viewport={{ once: true, margin: "-50px" }}
+              className="relative group"
             >
-              <div className="relative rounded-2xl bg-white/10 backdrop-blur-lg border border-white/20 p-8 hover:bg-white/20 transition-all duration-300 transform hover:shadow-xl hover:shadow-purple-500/20">
-                <div className="flex flex-col items-center">
+              <div className={`h-full bg-gray-800 rounded-xl p-6 border border-gray-700 
+                transition-all duration-300 hover:bg-gray-700 hover:shadow-xl 
+                ${member.leadership ? 'hover:border-blue-500/30' : 'hover:border-gray-600'}`}>
+
+                {/* Leadership Accent */}
+                {member.leadership && (
                   <motion.div
-                    whileHover={{ scale: 1.1 }}
-                    className={`w-24 h-24 rounded-full bg-gradient-to-br ${member.color} p-4 mb-6 flex items-center justify-center text-white shadow-lg`}
-                  >
+                    initial={{ width: 0 }}
+                    whileInView={{ width: "100%" }}
+                    transition={{ duration: 1 }}
+                    className="absolute top-0 left-0 h-px bg-gradient-to-r from-transparent via-blue-500 to-transparent"
+                  />
+                )}
+
+                <div className="flex flex-col items-center">
+                  <div className={`w-24 h-24 mb-6 rounded-full bg-gradient-to-br ${member.color} 
+                    flex items-center justify-center shadow-lg`}>
                     {member.icon}
-                  </motion.div>
-                  <h3 className="text-2xl font-semibold text-white mb-2">{member.name}</h3>
-                  <p className="text-gray-400 mb-6">{member.role}</p>
-                  <div className="flex space-x-4">
-                    {Object.entries(member.social).map(([platform, url]) => (
-                      <motion.a
-                        key={platform}
-                        href={url}
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="text-gray-400 hover:text-white transition-colors duration-300"
-                      >
-                        {platform === 'twitter' && <Twitter className="w-5 h-5" />}
-                        {platform === 'linkedin' && <Linkedin className="w-5 h-5" />}
-                        {platform === 'github' && <Github className="w-5 h-5" />}
-                      </motion.a>
-                    ))}
+                  </div>
+
+                  <h3 className={`text-xl text-center font-semibold mb-2 
+                    ${member.leadership ? 'text-blue-400' : 'text-white'}`}>
+                    {member.name}
+                  </h3>
+                  
+                  <p className="text-sm text-blue-400 font-medium mb-4 uppercase tracking-wide">
+                    {member.role}
+                  </p>
+                  
+                  <p className="text-gray-400 text-sm text-center mb-6 line-clamp-4">
+                    {member.bio}
+                  </p>
+
+                  <div className="flex gap-4 opacity-80 hover:opacity-100 transition-opacity">
+                    <a href={member.social.linkedin} target="_blank" rel="noopener">
+                      <Linkedin className="w-5 h-5 text-gray-400 hover:text-blue-400 transition-colors" />
+                    </a>
+                    <a href={member.social.twitter} target="_blank" rel="noopener">
+                      <Twitter className="w-5 h-5 text-gray-400 hover:text-blue-400 transition-colors" />
+                    </a>
                   </div>
                 </div>
               </div>
             </motion.div>
           ))}
-        </motion.div>
+        </div>
       </div>
-    </section>
+    </div>
   );
 };
