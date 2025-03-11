@@ -118,7 +118,9 @@ const CODE_CHALLENGES: Challenge[] = [
 }`
     },
     testCases: [
+        //@ts-ignore
       { input: [1, 5, 3, 9, 2], output: 9 },
+        //@ts-ignore
       { input: [-1, -5, -2], output: -1 }
     ]
   },
@@ -163,7 +165,9 @@ const CODE_CHALLENGES: Challenge[] = [
 }`
     },
     testCases: [
+        //@ts-ignore
       { input: ["(){}[]"], output: true },
+        //@ts-ignore
       { input: ["([)]"], output: false }
     ]
   },
@@ -207,7 +211,9 @@ const CODE_CHALLENGES: Challenge[] = [
 }`
     },
     testCases: [
+        //@ts-ignore
       { input: ["babad"], output: "bab" },
+        //@ts-ignore
       { input: ["cbbd"], output: "bb" }
     ]
   },
@@ -252,7 +258,9 @@ const CODE_CHALLENGES: Challenge[] = [
 }`
     },
     testCases: [
+        //@ts-ignore
       { input: ["aa", "a*"], output: true },
+        //@ts-ignore
       { input: ["ab", ".*"], output: true }
     ]
   },
@@ -274,7 +282,10 @@ const CODE_CHALLENGES: Challenge[] = [
 }`
     },
     testCases: [
+        //@ts-ignore
       { input: [[1, 3], [2]], output: 2.0 },
+        //@ts-ignore
+
       { input: [[1, 2], [3, 4]], output: 2.5 }
     ]
   },
@@ -297,7 +308,11 @@ const CODE_CHALLENGES: Challenge[] = [
 }`
     },
     testCases: [
+        //@ts-ignore
+
       { input: [[[0,16,13,0],[0,0,10,12],[0,4,0,14],[0,0,0,0]], 0, 3], output: 23 },
+        //@ts-ignore
+
       { input: [[[0,10,0],[0,0,5],[0,0,0]], 0, 2], output: 5 }
     ]
   },
@@ -337,7 +352,11 @@ public:
 };`
     },
     testCases: [
+        //@ts-ignore
+
       { input: [[[1,3,5,7,9,11], [0,2]]], output: 9 },
+        //@ts-ignore
+
       { input: [[[1,2,3,4,5], [2,4]]], output: 12 }
     ]
   },
@@ -359,7 +378,10 @@ public:
 }`
     },
     testCases: [
+        //@ts-ignore
       { input: [[[0,16,13,0],[0,0,10,12],[0,4,0,14],[0,0,0,0]], 0, 3], output: 23 },
+        //@ts-ignore
+
       { input: [[[0,10,0],[0,0,5],[0,0,0]], 0, 2], output: 5 }
     ]
   }

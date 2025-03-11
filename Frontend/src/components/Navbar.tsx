@@ -80,7 +80,7 @@ export const Navbar = ({ title, icon: Icon }: NavProps) => {
   return (
     <motion.nav
       style={{ height: navbarHeight, opacity: navbarOpacity }}
-      className="sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-sm rounded-xl"
+      className="sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-sm" // Removed rounded-xl
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
@@ -107,14 +107,6 @@ export const Navbar = ({ title, icon: Icon }: NavProps) => {
           {/* Desktop Navigation */}
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-4">
-              <motion.button
-                onClick={() => handleNavigation('/')}
-                className="relative px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-200 hover:text-blue-600 dark:hover:text-blue-400"
-                whileHover={{ scale: 1.05 }}
-              >
-                Home
-              </motion.button>
-
               <motion.button
                 onClick={() => handleNavigation('/content')}
                 className="relative px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-200 hover:text-blue-600 dark:hover:text-blue-400"
@@ -154,14 +146,6 @@ export const Navbar = ({ title, icon: Icon }: NavProps) => {
               >
                 Resource Hub
               </motion.button>
-
-              {/* <motion.button
-                onClick={() => handleNavigation('/edu')}
-                className="relative px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-200 hover:text-blue-600 dark:hover:text-blue-400"
-                whileHover={{ scale: 1.05 }}
-              >
-                Contact
-              </motion.button> */}
             </div>
           </div>
 
@@ -204,51 +188,43 @@ export const Navbar = ({ title, icon: Icon }: NavProps) => {
           >
             <div className="flex flex-col space-y-2">
               <motion.button
-                onClick={() => handleNavigation('/')}
+                onClick={() => handleNavigation('/content')}
                 className="block px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
                 whileHover={{ scale: 1.05 }}
               >
-                Home
+                Theory Mastery
               </motion.button>
 
               <motion.button
-                onClick={() => handleNavigation('/tracker')}
+                onClick={() => handleNavigation('/Code')}
                 className="block px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
                 whileHover={{ scale: 1.05 }}
               >
-                MoodSphere
+                Code Dojo
               </motion.button>
 
               <motion.button
-                onClick={() => handleNavigation('/journaling')}
+                onClick={() => handleNavigation('/cp')}
                 className="block px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
                 whileHover={{ scale: 1.05 }}
               >
-                Journaling
+                Competative Arena
               </motion.button>
 
               <motion.button
-                onClick={() => handleNavigation('/DNA')}
+                onClick={() => handleNavigation('/kc')}
                 className="block px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
                 whileHover={{ scale: 1.05 }}
               >
-                DNA
+                Knowledge Check
               </motion.button>
 
               <motion.button
-                onClick={() => handleNavigation('/chatbot')}
+                onClick={() => handleNavigation('/rh')}
                 className="block px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
                 whileHover={{ scale: 1.05 }}
               >
-                ChatBot
-              </motion.button>
-
-              <motion.button
-                onClick={() => handleNavigation('/contact')}
-                className="block px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
-                whileHover={{ scale: 1.05 }}
-              >
-                Contact
+                Resource Hub
               </motion.button>
             </div>
           </motion.div>
