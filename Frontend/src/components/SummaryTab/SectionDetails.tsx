@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, BookMarked, Share2, Check, Zap, Trophy, Flame, LockKeyhole, BrainCircuit } from 'lucide-react';
+import { Sparkles, BookMarked, Share2, Zap, Trophy, Flame, BrainCircuit } from 'lucide-react';
 
 export const SectionDetails = ({ section }: any) => (
   <motion.div
