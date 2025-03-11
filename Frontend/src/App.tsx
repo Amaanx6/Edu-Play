@@ -6,11 +6,11 @@ import {YouTubeLearningPortal} from "./components/YouTubeInputCard"
 import{SummaryComponent} from "./components/SummaryTab"
 import { CodeTab } from './components/CodeTab';
 import { CompetitiveTab } from './components/CompetitiveTab';
-import { QuizTab } from './components/QuizTab';
 import { ResourcesTab } from './components/ResourcesTab';
 import { MainLanding } from './components/Landing/Main-Landing';
 import { TheoryTab } from './components/SummaryTab/TheoryTab';
 import { HARDCODED_SUMMARY } from './components/SummaryTab';
+import { MainQuiz } from './components/Knowledge-Check/MainQuiz';
 // import { Divide } from 'lucide-react';
 
 const App: React.FC = () => {
@@ -24,7 +24,7 @@ const App: React.FC = () => {
           <Route path="/content2" element={<TheoryTab summary={HARDCODED_SUMMARY}/>} />
           <Route path="/code" element={<CodeTab />} />
           <Route path="/cp" element={<CompetitiveTab />} />
-          <Route path="/kc" element={<QuizTab />} />
+          <Route path="/kc" element={<MainQuiz />} />
           <Route path="/rh" element={<ResourcesTab />} />
         </Routes>
         <ToastContainer position="top-right" autoClose={3000} />
