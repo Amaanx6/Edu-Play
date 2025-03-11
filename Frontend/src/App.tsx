@@ -3,13 +3,14 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { YouTubeLearningPortal } from './components/YouTubeInputCard';
 import { SummaryComponent } from './components/SummaryTab';
-import { CodeTab } from './components/CodeTab';
+// import { CodeTab } from './components/CodeTab';
 import { CompetitiveTab } from './components/CompetitiveTab';
 import { MainLanding } from './components/Landing/Main-Landing';
 import { TheoryTab } from './components/SummaryTab/TheoryTab';
 import { HARDCODED_SUMMARY } from './components/SummaryTab';
 import { MainQuiz } from './components/Knowledge-Check/MainQuiz';
 import { MainResources } from './components/Resources/MainResources';
+import { CodePlayground } from './components/CodeDojo/Codeplayground';
 
 const App: React.FC = () => {
   return (
@@ -20,7 +21,8 @@ const App: React.FC = () => {
           <Route path="/input" element={<YouTubeLearningPortal />} />
           <Route path="/content" element={<SummaryComponent />} />
           <Route path="/content2" element={<TheoryTab summary={HARDCODED_SUMMARY} />} />
-          <Route path="/code" element={<CodeTab />} />
+          <Route path="/code" element={<CodePlayground />} />
+          {/* <Route path="/code" element={<CodeTab />} /> */}
           <Route path="/cp" element={<CompetitiveTab />} />
           <Route path="/kc" element={<MainQuiz />} />
           <Route path="/rh" element={<MainResources />} />
