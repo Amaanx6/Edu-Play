@@ -34,7 +34,9 @@ const CODE_CHALLENGES: Challenge[] = [
   // Your code here
 }`,
     testCases: [
+        //@ts-ignore
       { input: [1, 2, 3], output: 6 },
+      //@ts-ignore
       { input: [10, -5, 3], output: 8 }
     ]
   },
