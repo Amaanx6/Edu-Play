@@ -1,23 +1,22 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import { Linkedin, Twitter, User } from 'lucide-react';
 
 export const Team = () => {
   const teamMembers = [
     {
-      name: 'Md Mubashiruddin',
+      name: 'Mohammad Sarwar Khan',
       role: 'Team Lead',
-      bio: "Expert in implementing complex features and maintaining code quality through rigorous development practices.",
-      social: { linkedin: 'https://www.linkedin.com/in/md-mubashiruddin/', twitter: 'https://x.com/amaanx_6' },
+      bio: "Driving technical excellence in full-stack development, specializing in scalable MERN solutions and system architecture design.",
+      social: { linkedin: '#', twitter: '#' },
       leadership: true,
       icon: <User className="w-12 h-12 text-white" />, // Male icon
       color: "from-blue-600 to-indigo-500" // Blue-toned gradient for male
     },
     {
-      name: 'Mohammad Sarwar Khan',
+      name: 'Md Mubashiruddin',
       role: 'Lead Developer',
-      bio: 'Driving technical excellence in full-stack development, specializing in scalable MERN solutions and system architecture design.',
-      social: { linkedin: 'https://www.linkedin.com/in/mohammed-sarwar-khan/', twitter: 'https://x.com/mohfazam' },
+      bio: 'Expert in implementing complex features and maintaining code quality through rigorous development practices.',
+      social: { linkedin: '#', twitter: '#' },
       icon: <User className="w-12 h-12 text-white" />, // Male icon
       color: "from-blue-500 to-cyan-500" // Slightly different blue gradient for male
     },
@@ -25,7 +24,7 @@ export const Team = () => {
       name: 'Kafia Kauser',
       role: 'Researcher and Presenter',
       bio: 'Spearheading technology research and innovation strategies for cutting-edge solutions.',
-      social: { linkedin: 'https://www.linkedin.com/in/kafia-kauser-019647294', twitter: 'https://x.com/KauserKafia' },
+      social: { linkedin: '#', twitter: '#' },
       icon: <User className="w-12 h-12 text-white" />, // Female icon
       color: "from-pink-500 to-rose-500" // Pink-toned gradient for female
     },
@@ -33,7 +32,7 @@ export const Team = () => {
       name: 'Madiyah Numa',
       role: 'Quality Assurance',
       bio: 'Ensuring flawless user experiences through meticulous testing and quality control processes.',
-      social: { linkedin: 'https://www.linkedin.com/in/madiyah-numa-2903aa2a6', twitter: 'https://x.com/mnuma0_0' },
+      social: { linkedin: '#', twitter: '#' },
       icon: <User className="w-12 h-12 text-white" />, // Female icon
       color: "from-rose-600 to-pink-400" // Slightly different pink gradient for female
     },
@@ -43,7 +42,11 @@ export const Team = () => {
     hidden: { textShadow: "0 0 0px rgba(59, 130, 246, 0)" },
     visible: {
       textShadow: "0 0 12px rgba(59, 130, 246, 0.3)",
-      transition: { duration: 1.5, repeat: Infinity, repeatType: "reverse" }
+      transition: {
+        duration: 1.5,
+        repeat: Infinity,
+        repeatType: "reverse" as const // Explicitly type as "reverse"
+      }
     }
   };
 
