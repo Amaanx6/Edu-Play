@@ -8,8 +8,8 @@ import {Home} from 'lucide-react'
 export function MainLanding() {
   return (
     <div>
-      <div className="absolute w-full">
-      <Navbar title="Edu-Play" icon={Home} />
+      <div className="absolute w-full rounded-none">
+        <Navbar title="Edu-Play" icon={Home} />
       </div>
       <Hero />
       <Features />
