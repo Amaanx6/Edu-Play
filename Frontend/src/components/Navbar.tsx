@@ -14,7 +14,7 @@ const ProfileBadge = () => {
 
   const handleSignOut = () => {
     localStorage.removeItem('isAuthenticated');
-    navigate('/signin');
+    navigate('/signup');
   };
 
   return (
