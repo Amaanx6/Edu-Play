@@ -3,8 +3,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { YouTubeLearningPortal } from './components/YouTubeInputCard';
 import { SummaryComponent } from './components/SummaryTab';
-// import { CodeTab } from './components/CodeTab';
-import { CompetitiveTab } from './components/CompetitiveTab';
 import { MainLanding } from './components/Landing/Main-Landing';
 import { TheoryTab } from './components/SummaryTab/TheoryTab';
 import { HARDCODED_SUMMARY } from './components/SummaryTab';
