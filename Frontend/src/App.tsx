@@ -3,7 +3,6 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import {YouTubeLearningPortal} from "./components/YouTubeInputCard"
-import{SummaryComponent} from "./components/SummaryTab"
 import { CodeTab } from './components/CodeTab';
 import { CompetitiveTab } from './components/CompetitiveTab';
 import { QuizTab } from './components/QuizTab';
@@ -20,8 +19,7 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<MainLanding />} />
           <Route path="/input" element={<YouTubeLearningPortal />} />
-          <Route path="/content" element={<SummaryComponent />} />
-          <Route path="/content2" element={<TheoryTab summary={HARDCODED_SUMMARY}/>} />
+          <Route path="/content" element={<TheoryTab summary={HARDCODED_SUMMARY}/>} />
           <Route path="/code" element={<CodeTab />} />
           <Route path="/cp" element={<CompetitiveTab />} />
           <Route path="/kc" element={<QuizTab />} />
