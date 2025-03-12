@@ -1,188 +1,188 @@
 export const questions = {
-    easy: [
+  easy: [
       {
-        question: "What is the maximum number of children a node can have in a binary tree?",
-        options: ["1", "2", "3", "Unlimited"],
-        correct: 1,
-        explanation: "In a binary tree, each node can have at most 2 children - a left child and a right child."
+          question: "What is the index of the first element in an array?",
+          options: ["0", "1", "-1", "Depends on the array"],
+          correct: 0,
+          explanation: "In most programming languages, the index of the first element in an array is 0."
       },
       {
-        question: "Which traversal method visits the root node first?",
-        options: ["In-order", "Pre-order", "Post-order", "Level-order"],
-        correct: 1,
-        explanation: "Pre-order traversal visits the root node first, then the left subtree, and finally the right subtree."
+          question: "What is the time complexity of accessing an element in an array by its index?",
+          options: ["O(1)", "O(log n)", "O(n)", "O(n²)"],
+          correct: 0,
+          explanation: "Accessing an element in an array by its index is a constant-time operation, O(1)."
       },
       {
-        question: "What is a leaf node in a binary tree?",
-        options: ["A node with only one child", "A node with no children", "The root node", "A node with two children"],
-        correct: 1,
-        explanation: "A leaf node is a node that has no children (no left or right child)."
+          question: "Which of the following is a disadvantage of arrays?",
+          options: ["Fast access by index", "Fixed size", "Stores elements of the same type", "Efficient memory usage"],
+          correct: 1,
+          explanation: "Arrays have a fixed size, which means they cannot dynamically grow or shrink."
       },
       {
-        question: "Which data structure is used for Level-Order Traversal?",
-        options: ["Stack", "Queue", "Linked List", "Hash Table"],
-        correct: 1,
-        explanation: "Level-order traversal uses a Queue to visit nodes level by level, from left to right."
+          question: "What is the default value of an uninitialized element in a numeric array in most programming languages?",
+          options: ["0", "1", "null", "undefined"],
+          correct: 0,
+          explanation: "In most programming languages, uninitialized elements in a numeric array default to 0."
       },
       {
-        question: "What is the minimum number of nodes in a binary tree of height 2?",
-        options: ["2", "3", "4", "5"],
-        correct: 1,
-        explanation: "A binary tree of height 2 needs at least 3 nodes: a root and at least one node at level 1 and one at level 2."
+          question: "What is the time complexity of inserting an element at the end of a dynamic array (assuming no resizing is needed)?",
+          options: ["O(1)", "O(log n)", "O(n)", "O(n²)"],
+          correct: 0,
+          explanation: "Inserting an element at the end of a dynamic array is O(1) if no resizing is required."
       },
       {
-        question: "What is the relationship between nodes at the same level?",
-        options: ["Parent-child", "Siblings", "Ancestors", "Descendants"],
-        correct: 1,
-        explanation: "Nodes at the same level in a binary tree are called siblings, regardless of whether they share the same parent."
+          question: "What is the time complexity of searching for an element in an unsorted array?",
+          options: ["O(1)", "O(log n)", "O(n)", "O(n²)"],
+          correct: 2,
+          explanation: "Searching for an element in an unsorted array requires checking each element, which is O(n)."
       },
       {
-        question: "Which of these is NOT a type of binary tree?",
-        options: ["Complete", "Circular", "Full", "Perfect"],
-        correct: 1,
-        explanation: "A 'Circular' binary tree is not a valid type. The main types are Complete, Full, Perfect, and Balanced binary trees."
+          question: "What is the maximum number of elements an array can hold?",
+          options: ["100", "1000", "Depends on the programming language and system memory", "Unlimited"],
+          correct: 2,
+          explanation: "The maximum number of elements an array can hold depends on the programming language and the available system memory."
       },
       {
-        question: "What is the maximum number of nodes at level 3 of a binary tree?",
-        options: ["4", "8", "16", "32"],
-        correct: 1,
-        explanation: "At level 3 (considering root at level 0), the maximum number of nodes is 2³ = 8 nodes."
+          question: "What is the result of accessing an out-of-bounds index in an array?",
+          options: ["Returns null", "Returns undefined", "Throws an error", "Returns the last element"],
+          correct: 2,
+          explanation: "Accessing an out-of-bounds index typically results in an error or exception in most programming languages."
       },
       {
-        question: "In a binary tree, a node with one child must have it as a...",
-        options: ["Left child only", "Right child only", "Either left or right", "Both left and right"],
-        correct: 2,
-        explanation: "In a binary tree, a node with one child can have it as either a left child or a right child."
+          question: "Which of the following is true about multidimensional arrays?",
+          options: ["They are arrays of arrays", "They can only have two dimensions", "They are faster than single-dimensional arrays", "They cannot store primitive data types"],
+          correct: 0,
+          explanation: "Multidimensional arrays are essentially arrays of arrays, allowing for more complex data structures."
       },
       {
-        question: "What is the height of an empty binary tree?",
-        options: ["0", "-1", "1", "undefined"],
-        correct: 1,
-        explanation: "The height of an empty binary tree is -1, as there are no nodes to traverse."
+          question: "What is the time complexity of deleting an element from the middle of an array?",
+          options: ["O(1)", "O(log n)", "O(n)", "O(n²)"],
+          correct: 2,
+          explanation: "Deleting an element from the middle of an array requires shifting all subsequent elements, which is O(n)."
       }
-    ],
-    medium: [
+  ],
+  medium: [
       {
-        question: "What is the height of a tree with a single node?",
-        options: ["0", "1", "2", "None of the above"],
-        correct: 0,
-        explanation: "A tree with a single node has a height of 0 as there are no edges to traverse."
+          question: "What is the time complexity of resizing a dynamic array?",
+          options: ["O(1)", "O(log n)", "O(n)", "O(n²)"],
+          correct: 2,
+          explanation: "Resizing a dynamic array involves copying all elements to a new array, which is O(n)."
       },
       {
-        question: "In a binary tree, at which level can the first incomplete level occur?",
-        options: ["First level", "Last level only", "Any level", "Second level"],
-        correct: 2,
-        explanation: "In a binary tree, an incomplete level can occur at any level except in a perfect binary tree."
+          question: "What is the space complexity of storing an array of size n?",
+          options: ["O(1)", "O(log n)", "O(n)", "O(n²)"],
+          correct: 2,
+          explanation: "The space complexity of an array is O(n), as it requires memory proportional to the number of elements."
       },
       {
-        question: "What is the time complexity of inserting a node in a binary tree?",
-        options: ["O(1)", "O(log n)", "O(n)", "O(n²)"],
-        correct: 2,
-        explanation: "In a binary tree (not BST), insertion can take O(n) time as we might need to traverse all nodes to find the insertion point."
+          question: "Which of the following is a common operation performed on arrays?",
+          options: ["Sorting", "Hashing", "Graph traversal", "Tree balancing"],
+          correct: 0,
+          explanation: "Sorting is a common operation performed on arrays to arrange elements in a specific order."
       },
       {
-        question: "Which traversal would print the nodes in ascending order in a BST?",
-        options: ["Pre-order", "In-order", "Post-order", "Level-order"],
-        correct: 1,
-        explanation: "In-order traversal of a BST visits nodes in ascending order (left-root-right)."
+          question: "What is the time complexity of finding the maximum element in an unsorted array?",
+          options: ["O(1)", "O(log n)", "O(n)", "O(n log n)"],
+          correct: 2,
+          explanation: "Finding the maximum element in an unsorted array requires checking each element, which is O(n)."
       },
       {
-        question: "What is the minimum height of a binary tree with 7 nodes?",
-        options: ["2", "3", "4", "5"],
-        correct: 0,
-        explanation: "The minimum height is 2, achieved when the tree is as compact as possible."
+          question: "What is the result of concatenating two arrays of sizes m and n?",
+          options: ["An array of size m + n", "An array of size m * n", "An array of size max(m, n)", "An error"],
+          correct: 0,
+          explanation: "Concatenating two arrays results in a new array of size m + n, containing all elements from both arrays."
       },
       {
-        question: "What determines if a binary tree is height-balanced?",
-        options: ["Equal nodes in left and right", "Height difference ≤ 1", "Same number of levels", "Complete levels"],
-        correct: 1,
-        explanation: "A binary tree is height-balanced if the height difference between left and right subtrees is at most 1 for every node."
+          question: "What is the time complexity of reversing an array?",
+          options: ["O(1)", "O(log n)", "O(n)", "O(n²)"],
+          correct: 2,
+          explanation: "Reversing an array requires swapping elements, which takes O(n) time."
       },
       {
-        question: "Which property must a complete binary tree satisfy?",
-        options: ["All levels full", "Last level filled left to right", "All nodes have 2 children", "Equal height subtrees"],
-        correct: 1,
-        explanation: "In a complete binary tree, all levels except possibly the last are completely filled, and nodes in the last level are filled from left to right."
+          question: "What is the advantage of using a dynamic array over a static array?",
+          options: ["Faster access time", "Fixed size", "Ability to resize", "Lower memory usage"],
+          correct: 2,
+          explanation: "Dynamic arrays can resize themselves, unlike static arrays, which have a fixed size."
       },
       {
-        question: "What is the maximum width possible in a binary tree of height 3?",
-        options: ["4", "8", "16", "32"],
-        correct: 1,
-        explanation: "The maximum width occurs at the last level (h=3), which can have up to 2³ = 8 nodes."
+          question: "What is the time complexity of inserting an element at the beginning of an array?",
+          options: ["O(1)", "O(log n)", "O(n)", "O(n²)"],
+          correct: 2,
+          explanation: "Inserting an element at the beginning of an array requires shifting all elements, which is O(n)."
       },
       {
-        question: "In a full binary tree, what is the relationship between leaf nodes and internal nodes?",
-        options: ["Equal", "Leaves = Internal + 1", "Internal = Leaves + 1", "No relationship"],
-        correct: 1,
-        explanation: "In a full binary tree, the number of leaf nodes is always one more than the number of internal nodes."
+          question: "What is the time complexity of binary search on a sorted array?",
+          options: ["O(1)", "O(log n)", "O(n)", "O(n log n)"],
+          correct: 1,
+          explanation: "Binary search on a sorted array has a time complexity of O(log n)."
       },
       {
-        question: "What is the space complexity of recursive tree traversal?",
-        options: ["O(1)", "O(log n)", "O(n)", "O(n²)"],
-        correct: 1,
-        explanation: "The space complexity is O(log n) for balanced trees due to the recursion stack, but can be O(n) for skewed trees."
+          question: "What is the time complexity of merging two sorted arrays into a single sorted array?",
+          options: ["O(1)", "O(log n)", "O(n)", "O(n log n)"],
+          correct: 2,
+          explanation: "Merging two sorted arrays into a single sorted array takes O(n) time, where n is the total number of elements."
       }
-    ],
-    hard: [
+  ],
+  hard: [
       {
-        question: "In a complete binary tree, what is the index of the left child of a node at index 'i' in a 1-based array representation?",
-        options: ["2i", "2i + 1", "i/2", "i - 1"],
-        correct: 0,
-        explanation: "In a 1-based array representation of a complete binary tree, the left child of node at index i is at index 2i."
+          question: "What is the time complexity of finding the median of an unsorted array using the Quickselect algorithm?",
+          options: ["O(1)", "O(log n)", "O(n)", "O(n log n)"],
+          correct: 2,
+          explanation: "The Quickselect algorithm finds the median in O(n) time on average."
       },
       {
-        question: "What is the maximum number of nodes in a binary tree of height h?",
-        options: ["2^h", "2^(h+1)", "2^(h+1) - 1", "2^h - 1"],
-        correct: 2,
-        explanation: "A binary tree of height h can have at most 2^(h+1) - 1 nodes, where all levels are completely filled."
+          question: "What is the time complexity of rotating an array by k positions?",
+          options: ["O(1)", "O(log n)", "O(n)", "O(n²)"],
+          correct: 2,
+          explanation: "Rotating an array by k positions requires shifting elements, which takes O(n) time."
       },
       {
-        question: "In an AVL tree, what is the maximum possible difference between the heights of left and right subtrees?",
-        options: ["0", "1", "2", "3"],
-        correct: 1,
-        explanation: "In an AVL tree, the balance factor (difference in heights) must be -1, 0, or 1 for every node."
+          question: "What is the time complexity of finding all pairs of elements in an array that sum to a specific value?",
+          options: ["O(1)", "O(n)", "O(n log n)", "O(n²)"],
+          correct: 3,
+          explanation: "Finding all pairs of elements that sum to a specific value typically requires checking all possible pairs, which is O(n²)."
       },
       {
-        question: "What is the minimum number of nodes in an AVL tree of height h?",
-        options: ["Fib(h)", "Fib(h+1)", "Fib(h+2)", "Fib(h+3)"],
-        correct: 2,
-        explanation: "The minimum number of nodes in an AVL tree of height h is Fib(h+2) - 1, where Fib is the Fibonacci sequence."
+          question: "What is the time complexity of finding the longest increasing subsequence in an array?",
+          options: ["O(1)", "O(n)", "O(n log n)", "O(n²)"],
+          correct: 3,
+          explanation: "Finding the longest increasing subsequence in an array has a time complexity of O(n²) using dynamic programming."
       },
       {
-        question: "In a binary tree with n nodes, what is the relationship between the number of null links and actual links?",
-        options: ["Equal", "Null = Actual + 1", "Null = Actual + 2", "Null = 2n"],
-        correct: 2,
-        explanation: "In a binary tree with n nodes, the number of null links is always n + 1 more than the number of actual links."
+          question: "What is the time complexity of finding the kth smallest element in an unsorted array using sorting?",
+          options: ["O(1)", "O(n)", "O(n log n)", "O(n²)"],
+          correct: 2,
+          explanation: "Sorting the array and then finding the kth smallest element takes O(n log n) time."
       },
       {
-        question: "What is the time complexity of finding the lowest common ancestor in a binary tree?",
-        options: ["O(1)", "O(log n)", "O(n)", "O(h)"],
-        correct: 2,
-        explanation: "Finding the lowest common ancestor in a binary tree takes O(n) time as we might need to traverse all nodes."
+          question: "What is the time complexity of finding duplicates in an unsorted array using a hash set?",
+          options: ["O(1)", "O(n)", "O(n log n)", "O(n²)"],
+          correct: 1,
+          explanation: "Using a hash set to find duplicates in an unsorted array takes O(n) time."
       },
       {
-        question: "In a Red-Black tree, what is the maximum possible height in terms of the minimum possible height h?",
-        options: ["h", "2h", "2h + 1", "3h"],
-        correct: 1,
-        explanation: "In a Red-Black tree, the maximum height is at most 2 times the minimum height (which is log n)."
+          question: "What is the time complexity of finding the maximum subarray sum using Kadane's algorithm?",
+          options: ["O(1)", "O(n)", "O(n log n)", "O(n²)"],
+          correct: 1,
+          explanation: "Kadane's algorithm finds the maximum subarray sum in O(n) time."
       },
       {
-        question: "What is the space complexity of Morris Traversal?",
-        options: ["O(1)", "O(log n)", "O(n)", "O(h)"],
-        correct: 0,
-        explanation: "Morris Traversal achieves tree traversal using O(1) extra space by modifying and restoring the tree structure."
+          question: "What is the time complexity of finding the intersection of two sorted arrays?",
+          options: ["O(1)", "O(n)", "O(n log n)", "O(n²)"],
+          correct: 1,
+          explanation: "Finding the intersection of two sorted arrays takes O(n) time using a two-pointer approach."
       },
       {
-        question: "In a binary tree, how many different unlabeled tree structures are possible with n nodes?",
-        options: ["n!", "2^n", "Catalan(n)", "n^2"],
-        correct: 2,
-        explanation: "The number of different unlabeled binary tree structures with n nodes is given by the nth Catalan number."
+          question: "What is the time complexity of finding the majority element in an array using Boyer-Moore Voting Algorithm?",
+          options: ["O(1)", "O(n)", "O(n log n)", "O(n²)"],
+          correct: 1,
+          explanation: "The Boyer-Moore Voting Algorithm finds the majority element in O(n) time."
       },
       {
-        question: "What is the worst-case time complexity of building a binary tree from given inorder and preorder traversals?",
-        options: ["O(n)", "O(n log n)", "O(n²)", "O(2^n)"],
-        correct: 0,
-        explanation: "Building a binary tree from inorder and preorder traversals can be done in O(n) time using a hash map for inorder indices."
+          question: "What is the time complexity of finding the smallest missing positive integer in an unsorted array?",
+          options: ["O(1)", "O(n)", "O(n log n)", "O(n²)"],
+          correct: 1,
+          explanation: "Finding the smallest missing positive integer in an unsorted array can be done in O(n) time using a hash-based approach."
       }
-    ]
-  };
+  ]
+};
