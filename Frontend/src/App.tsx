@@ -12,6 +12,7 @@ import { CodePlayground } from './components/CodeDojo/Codeplayground';
 import { CompetitiveArena } from './components/CP/CompetativeArena';
 import { Signup } from './components/Auth/Signup';
 import { Login } from './components/Auth/Login';
+import { Dashboard } from './components/Dashboard/Dashboard';
 
 const App: React.FC = () => {
   return (
@@ -29,6 +30,7 @@ const App: React.FC = () => {
           <Route path="/cp" element={<CompetitiveArena />} />
           <Route path="/kc" element={<MainQuiz />} />
           <Route path="/rh" element={<MainResources />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
         <ToastContainer position="top-right" autoClose={3000} />
       </div>
