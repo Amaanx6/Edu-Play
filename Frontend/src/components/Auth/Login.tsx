@@ -83,7 +83,7 @@ export const Login = () => {
         
         // Redirect after a short delay
         setTimeout(() => {
-          navigate('/landing');
+          navigate('/');
         }, 1500);
       } else {
         setError(response.data.message || 'Login failed. Please try again.');
