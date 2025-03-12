@@ -97,7 +97,9 @@ const CODE_CHALLENGES: Challenge[] = [
     },
     testCases: [
       { input: [1, 2, 3], output: [3, 2, 1] },
-      { input: [9, 5, 2, 7], output: [7, 2, 5, 9] }
+      { input: [9, 5, 2, 7], output: [7, 2, 5, 9] },
+      { input: [], output: [] },            // Hidden Test Case 1
+      { input: [42], output: [42] }         // Hidden Test Case 2
     ]
   },
   {
@@ -110,7 +112,7 @@ const CODE_CHALLENGES: Challenge[] = [
       javascript: `function findMax(arr) {
   // Your code here
 }`,
-      python: `def find_max(arr):
+      python: ` dunes find_max(arr):
     # Your code here
     pass`,
       cpp: `int findMax(vector<int>& arr) {
@@ -285,7 +287,6 @@ const CODE_CHALLENGES: Challenge[] = [
         //@ts-ignore
       { input: [[1, 3], [2]], output: 2.0 },
         //@ts-ignore
-
       { input: [[1, 2], [3, 4]], output: 2.5 }
     ]
   },
@@ -309,10 +310,8 @@ const CODE_CHALLENGES: Challenge[] = [
     },
     testCases: [
         //@ts-ignore
-
       { input: [[[0,16,13,0],[0,0,10,12],[0,4,0,14],[0,0,0,0]], 0, 3], output: 23 },
         //@ts-ignore
-
       { input: [[[0,10,0],[0,0,5],[0,0,0]], 0, 2], output: 5 }
     ]
   },
@@ -353,10 +352,8 @@ public:
     },
     testCases: [
         //@ts-ignore
-
       { input: [[[1,3,5,7,9,11], [0,2]]], output: 9 },
         //@ts-ignore
-
       { input: [[[1,2,3,4,5], [2,4]]], output: 12 }
     ]
   },
@@ -381,7 +378,6 @@ public:
         //@ts-ignore
       { input: [[[0,16,13,0],[0,0,10,12],[0,4,0,14],[0,0,0,0]], 0, 3], output: 23 },
         //@ts-ignore
-
       { input: [[[0,10,0],[0,0,5],[0,0,0]], 0, 2], output: 5 }
     ]
   }
