@@ -13,12 +13,12 @@ const QuizContent = () => {
 export const MainQuiz = () => {
   return (
     <QuizProvider>
-      <div className="flex flex-col h-screen overflow-hidden">
+      <div className="flex flex-col h-screen">
         <Navbar 
           title="Quiz" 
           icon={Brain} 
         />
-        <main className="flex-grow overflow-hidden">
+        <main className="flex-grow overflow-y-scroll">
           <QuizContent />
         </main>
       </div>
