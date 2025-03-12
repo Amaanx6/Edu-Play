@@ -1,7 +1,9 @@
-import { motion } from 'framer-motion';
-import { Terminal, ChevronRight, ExternalLink, Code2, BookOpen } from 'lucide-react';
-import { useState } from 'react';
+// Combined CodeEditor.tsx and CodeChallenges.tsx
+import { motion, AnimatePresence } from 'framer-motion';
+import { Terminal, Clipboard, Rocket, Code, ChevronRight, ExternalLink, Code2, BookOpen } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
+// Types
 export type Language = 'javascript' | 'python' | 'cpp';
 
 interface Challenge {
@@ -15,7 +17,16 @@ interface Challenge {
     python: string;
     cpp: string;
   };
-  testCases: { input: any[]; output: any[] }[];
+  testCases: {
+    hidden: boolean;
+    input: any[];
+    output: any;
+  }[];
+}
+
+interface CodeEditorProps {
+  challenge: Challenge;
+  onXpGain: (amount: number) => void;
 }
 
 interface PlatformProblem {
@@ -25,59 +36,284 @@ interface PlatformProblem {
   url: string;
 }
 
+// Code Editor Component
+const LANGUAGES: { value: Language; label: string; extension: string }[] = [
+  { value: 'javascript', label: 'JavaScript', extension: '.js' },
+  { value: 'python', label: 'Python', extension: '.py' },
+  { value: 'cpp', label: 'C++', extension: '.cpp' }
+];
+
+export const CodeEditor = ({ challenge, onXpGain }: CodeEditorProps) => {
+  const [code, setCode] = useState(challenge.starterCode.javascript);
+  const [output, setOutput] = useState<string[]>([]);
+  const [isTyping, setIsTyping] = useState(false);
+  const [lastKeystroke, setLastKeystroke] = useState(Date.now());
+  const [selectedLanguage, setSelectedLanguage] = useState<Language>('javascript');
+  const [showHiddenTests, setShowHiddenTests] = useState(false);
+
+  useEffect(() => {
+    setCode(challenge.starterCode[selectedLanguage]);
+    setOutput([]);
+    setShowHiddenTests(false);
+  }, [challenge, selectedLanguage]);
+
+  const executeJavaScript = (code: string, testCase: any) => {
+    try {
+      const userFunction = new Function(`
+        ${code}
+        return reverseArray;
+      `)();
+      const result = userFunction([...testCase.input]);
+      return result;
+    } catch (error) {
+      throw new Error((error as Error).message);
+    }
+  };
+
+  const executePython = (code: string, testCase: any) => {
+    try {
+      const jsCode = code
+        .replace('def reverse_array(arr):', 'function reverseArray(arr) {')
+        .replace('    return', '  return')
+        .replace('[::-1]', '.slice().reverse()')
+        .replace('pass', 'return arr.slice().reverse()')
+        + '}';
+      const userFunction = new Function(`
+        ${jsCode}
+        return reverseArray;
+      `)();
+      return userFunction([...testCase.input]);
+    } catch (error) {
+      throw new Error((error as Error).message);
+    }
+  };
+
+  const executeCpp = (code: string, testCase: any) => {
+    try {
+      const jsCode = code
+        .replace(/vector<int>/g, '')
+        .replace(/&/g, '')
+        .replace('reverseArray(', 'function reverseArray(')
+        .replace(/\{[\s\S]*\}/, '{ return arr.slice().reverse(); }');
+      const userFunction = new Function(`
+        ${jsCode}
+        return reverseArray;
+      `)();
+      return userFunction([...testCase.input]);
+    } catch (error) {
+      throw new Error((error as Error).message);
+    }
+  };
+
+  const runCode = () => {
+    try {
+      const results = challenge.testCases.map((testCase, index) => {
+        try {
+          let result;
+          switch (selectedLanguage) {
+            case 'javascript':
+              result = executeJavaScript(code, testCase);
+              break;
+            case 'python':
+              result = executePython(code, testCase);
+              break;
+            case 'cpp':
+              result = executeCpp(code, testCase);
+              break;
+            default:
+              throw new Error('Unsupported language');
+          }
+
+          const arraysEqual = (a: any[], b: any[]) => {
+            if (!Array.isArray(a) || !Array.isArray(b)) return false;
+            if (a.length !== b.length) return false;
+            for (let i = 0; i < a.length; i++) {
+              if (a[i] !== b[i]) return false;
+            }
+            return true;
+          };
+
+          const success = arraysEqual(result, testCase.output);
+          if (success) onXpGain(50);
+          
+          return {
+            input: testCase.input,
+            expected: testCase.output,
+            received: result,
+            success,
+            index,
+            hidden: testCase.hidden
+          };
+        } catch (error) {
+          return { error: (error as Error).message, index, hidden: testCase.hidden };
+        }
+      });
+
+      const allTestsPassed = results.every(res => res.success);
+      setShowHiddenTests(allTestsPassed);
+
+      const hiddenTests = results.filter(r => r.hidden);
+      const hiddenPassed = hiddenTests.filter(r => r.success).length;
+      const hiddenFailed = hiddenTests.length - hiddenPassed;
+      const summary = allTestsPassed && hiddenTests.length > 0 
+        ? [`📊 Hidden Test Summary: ${hiddenPassed}/${hiddenTests.length} passed, ${hiddenFailed} failed`]
+        : [];
+
+      setOutput([
+        ...summary,
+        ...results.map((res) => {
+          if (res.hidden && !showHiddenTests) {
+            return `🔒 Hidden Test ${res.index + 1} (Pass all visible tests to reveal)`;
+          }
+          const prefix = res.hidden ? '🔓 Hidden Test' : 'Test';
+          return res.success 
+            ? `✅ ${prefix} ${res.index + 1} Passed!\n   Input: ${JSON.stringify(res.input)}\n   Output: ${JSON.stringify(res.received)}`
+            : res.error 
+              ? `❌ ${prefix} ${res.index + 1} Error: ${res.error}`
+              : `❌ ${prefix} ${res.index + 1} Failed\n   Input: ${JSON.stringify(res.input)}\n   Expected: ${JSON.stringify(res.expected)}\n   Received: ${JSON.stringify(res.received)}`;
+        })
+      ]);
+    } catch (err) {
+      setOutput([`🚨 Runtime Error: ${(err as Error).message}`]);
+    }
+  };
+
+  const handleCodeChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setCode(e.target.value);
+    setIsTyping(true);
+    setLastKeystroke(Date.now());
+    setTimeout(() => {
+      if (Date.now() - lastKeystroke >= 1500) setIsTyping(false);
+    }, 1500);
+  };
+
+  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedLanguage(e.target.value as Language);
+  };
+
+  return (
+    <div className="space-y-5">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-3">
+          <Terminal className="h-6 w-6 text-blue-500" />
+          <h3 className="text-xl font-semibold">Code Editor</h3>
+          {isTyping && (
+            <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-xs bg-blue-500/20 px-2 py-1 rounded-full">
+              Typing...
+            </motion.span>
+          )}
+        </div>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <Code className="h-4 w-4 text-slate-400" />
+            <select
+              value={selectedLanguage}
+              onChange={handleLanguageChange}
+              className="bg-slate-700 text-sm px-3 py-1.5 rounded-lg border border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              {LANGUAGES.map(lang => (
+                <option key={lang.value} value={lang.value}>
+                  {lang.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <button
+            onClick={() => setCode(challenge.starterCode[selectedLanguage])}
+            className="bg-slate-700 px-4 py-2 rounded-lg hover:bg-slate-600 flex items-center gap-2 text-sm transition-colors"
+          >
+            <Clipboard className="h-4 w-4" />
+            Reset Code
+          </button>
+        </div>
+      </div>
+      
+      <div className="relative">
+        <textarea
+          value={code}
+          onChange={handleCodeChange}
+          onPaste={(e) => e.preventDefault()}
+          onCopy={(e) => e.preventDefault()}
+          className="w-full h-64 p-4 bg-slate-900 rounded-xl font-mono text-sm resize-none focus:ring-2 focus:ring-blue-500 outline-none"
+          placeholder="Implement your solution here..."
+          spellCheck="false"
+        />
+        <div className="absolute bottom-2 right-2 text-xs text-slate-500">
+          {code.split('\n').length} lines | {selectedLanguage}
+        </div>
+      </div>
+      
+      <button 
+        onClick={runCode}
+        className="bg-blue-600 px-6 py-3 rounded-xl hover:bg-blue-700 flex items-center gap-2 w-full justify-center transition-colors"
+      >
+        <Rocket className="h-5 w-5" />
+        Execute Code
+      </button>
+
+      <div className="mt-6 space-y-4">
+        <div className="flex items-center gap-3 mb-2">
+          <Terminal className="h-6 w-6 text-green-500" />
+          <h3 className="text-xl font-semibold">Execution Results</h3>
+        </div>
+        
+        <AnimatePresence>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="bg-slate-900 p-4 rounded-xl space-y-3 font-mono text-sm"
+          >
+            {output.length > 0 ? (
+              output.map((line, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  className={`p-3 rounded-lg ${
+                    line.startsWith('✅') ? 'bg-green-500/10' :
+                    line.startsWith('❌') ? 'bg-red-500/10' :
+                    line.startsWith('⚠️') ? 'bg-yellow-500/20' :
+                    line.startsWith('🔒') ? 'bg-slate-700/50' :
+                    line.startsWith('📊') ? 'bg-blue-500/20' :
+                    'bg-slate-800'
+                  }`}
+                >
+                  {line.split('\n').map((l, i) => (
+                    <div key={i}>{l}</div>
+                  ))}
+                </motion.div>
+              ))
+            ) : (
+              <div className="text-slate-500 italic">
+                Your results will appear here...
+              </div>
+            )}
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+};
+
+// Code Challenges Component
 const PLATFORM_PROBLEMS: Record<string, PlatformProblem[]> = {
   'Array Reversal': [
-    {
-      title: "Reverse Array",
-      difficulty: "Easy",
-      platform: "GeeksforGeeks",
-      url: "https://practice.geeksforgeeks.org/problems/reverse-an-array/0"
-    },
-    {
-      title: "Reverse String",
-      difficulty: "Easy",
-      platform: "LeetCode",
-      url: "https://leetcode.com/problems/reverse-string/"
-    },
-    {
-      title: "Reverse The Array",
-      difficulty: "Easy",
-      platform: "CodeChef",
-      url: "https://www.codechef.com/problems/REVARR"
-    }
+    { title: "Reverse Array", difficulty: "Easy", platform: "GeeksforGeeks", url: "https://practice.geeksforgeeks.org/problems/reverse-an-array/0" },
+    { title: "Reverse String", difficulty: "Easy", platform: "LeetCode", url: "https://leetcode.com/problems/reverse-string/" },
+    { title: "Reverse The Array", difficulty: "Easy", platform: "CodeChef", url: "https://www.codechef.com/problems/REVARR" }
   ],
   'Find Maximum': [
-    {
-      title: "Maximum Element",
-      difficulty: "Easy",
-      platform: "GeeksforGeeks",
-      url: "https://practice.geeksforgeeks.org/problems/find-maximum-in-array/1"
-    },
-    {
-      title: "Maximum Subarray",
-      difficulty: "Medium",
-      platform: "LeetCode",
-      url: "https://leetcode.com/problems/maximum-subarray/"
-    }
+    { title: "Maximum Element", difficulty: "Easy", platform: "GeeksforGeeks", url: "https://practice.geeksforgeeks.org/problems/find-maximum-in-array/1" },
+    { title: "Maximum Subarray", difficulty: "Medium", platform: "LeetCode", url: "https://leetcode.com/problems/maximum-subarray/" }
   ],
   'Two Sum': [
-    {
-      title: "Two Sum",
-      difficulty: "Easy",
-      platform: "LeetCode",
-      url: "https://leetcode.com/problems/two-sum/"
-    },
-    {
-      title: "Pair Sum",
-      difficulty: "Easy",
-      platform: "GeeksforGeeks",
-      url: "https://practice.geeksforgeeks.org/problems/pair-sum-existence/1"
-    }
+    { title: "Two Sum", difficulty: "Easy", platform: "LeetCode", url: "https://leetcode.com/problems/two-sum/" },
+    { title: "Pair Sum", difficulty: "Easy", platform: "GeeksforGeeks", url: "https://practice.geeksforgeeks.org/problems/pair-sum-existence/1" }
   ]
 };
 
 const CODE_CHALLENGES: Challenge[] = [
-  // Easy Category
   {
     id: 1,
     title: "Array Reversal",
@@ -96,8 +332,10 @@ const CODE_CHALLENGES: Challenge[] = [
 }`
     },
     testCases: [
-      { input: [1, 2, 3], output: [3, 2, 1] },
-      { input: [9, 5, 2, 7], output: [7, 2, 5, 9] }
+      { input: [1, 2, 3], output: [3, 2, 1], hidden: false },
+      { input: [9, 5, 2, 7], output: [7, 2, 5, 9], hidden: false },
+      { input: [], output: [], hidden: true },
+      { input: [42], output: [42], hidden: true }
     ]
   },
   {
@@ -118,10 +356,8 @@ const CODE_CHALLENGES: Challenge[] = [
 }`
     },
     testCases: [
-        //@ts-ignore
-      { input: [1, 5, 3, 9, 2], output: 9 },
-        //@ts-ignore
-      { input: [-1, -5, -2], output: -1 }
+      { input: [1, 5, 3, 9, 2], output: 9, hidden: false },
+      { input: [-1, -5, -2], output: -1, hidden: false }
     ]
   },
   {
@@ -142,8 +378,8 @@ const CODE_CHALLENGES: Challenge[] = [
 }`
     },
     testCases: [
-      { input: [[2, 7, 11, 15], 9], output: [0, 1] },
-      { input: [[3, 2, 4], 6], output: [1, 2] }
+      { input: [[2, 7, 11, 15], 9], output: [0, 1], hidden: false },
+      { input: [[3, 2, 4], 6], output: [1, 2], hidden: false }
     ]
   },
   // Medium Category
@@ -165,10 +401,8 @@ const CODE_CHALLENGES: Challenge[] = [
 }`
     },
     testCases: [
-        //@ts-ignore
-      { input: ["(){}[]"], output: true },
-        //@ts-ignore
-      { input: ["([)]"], output: false }
+      { input: ["(){}[]"], output: true, hidden: false },
+      { input: ["([)]"], output: false, hidden: false }
     ]
   },
   {
@@ -189,8 +423,8 @@ const CODE_CHALLENGES: Challenge[] = [
 }`
     },
     testCases: [
-      { input: [["eat","tea","tan","ate","nat","bat"]], output: [["eat","tea","ate"],["tan","nat"],["bat"]] },
-      { input: [["",""]], output: [["",""]] }
+      { input: [["eat", "tea", "tan", "ate", "nat", "bat"]], output: [["eat", "tea", "ate"], ["tan", "nat"], ["bat"]], hidden: false },
+      { input: [["", ""]], output: [["", ""]], hidden: false }
     ]
   },
   {
@@ -211,10 +445,8 @@ const CODE_CHALLENGES: Challenge[] = [
 }`
     },
     testCases: [
-        //@ts-ignore
-      { input: ["babad"], output: "bab" },
-        //@ts-ignore
-      { input: ["cbbd"], output: "bb" }
+      { input: ["babad"], output: "bab", hidden: false },
+      { input: ["cbbd"], output: "bb", hidden: false }
     ]
   },
   // Hard Category
@@ -236,8 +468,8 @@ const CODE_CHALLENGES: Challenge[] = [
 }`
     },
     testCases: [
-      { input: [[[1,4,5],[1,3,4],[2,6]]], output: [1,1,2,3,4,4,5,6] },
-      { input: [[]], output: [] }
+      { input: [[[1, 4, 5], [1, 3, 4], [2, 6]]], output: [1, 1, 2, 3, 4, 4, 5, 6], hidden: false },
+      { input: [[]], output: [], hidden: false }
     ]
   },
   {
@@ -258,10 +490,8 @@ const CODE_CHALLENGES: Challenge[] = [
 }`
     },
     testCases: [
-        //@ts-ignore
-      { input: ["aa", "a*"], output: true },
-        //@ts-ignore
-      { input: ["ab", ".*"], output: true }
+      { input: ["aa", "a*"], output: true, hidden: false },
+      { input: ["ab", ".*"], output: true, hidden: false }
     ]
   },
   {
@@ -282,11 +512,8 @@ const CODE_CHALLENGES: Challenge[] = [
 }`
     },
     testCases: [
-        //@ts-ignore
-      { input: [[1, 3], [2]], output: 2.0 },
-        //@ts-ignore
-
-      { input: [[1, 2], [3, 4]], output: 2.5 }
+      { input: [[1, 3], [2]], output: 2.0, hidden: false },
+      { input: [[1, 2], [3, 4]], output: 2.5, hidden: false }
     ]
   },
   // Competitive Programming Category
@@ -308,12 +535,8 @@ const CODE_CHALLENGES: Challenge[] = [
 }`
     },
     testCases: [
-        //@ts-ignore
-
-      { input: [[[0,16,13,0],[0,0,10,12],[0,4,0,14],[0,0,0,0]], 0, 3], output: 23 },
-        //@ts-ignore
-
-      { input: [[[0,10,0],[0,0,5],[0,0,0]], 0, 2], output: 5 }
+      { input: [[[0,16,13,0],[0,0,10,12],[0,4,0,14],[0,0,0,0]], 0, 3], output: 23, hidden: false },
+      { input: [[[0,10,0],[0,0,5],[0,0,0]], 0, 2], output: 5, hidden: false }
     ]
   },
   {
@@ -352,12 +575,8 @@ public:
 };`
     },
     testCases: [
-        //@ts-ignore
-
-      { input: [[[1,3,5,7,9,11], [0,2]]], output: 9 },
-        //@ts-ignore
-
-      { input: [[[1,2,3,4,5], [2,4]]], output: 12 }
+      { input: [[[1,3,5,7,9,11], [0,2]]], output: 9, hidden: false },
+      { input: [[[1,2,3,4,5], [2,4]]], output: 12, hidden: false }
     ]
   },
   {
@@ -378,11 +597,8 @@ public:
 }`
     },
     testCases: [
-        //@ts-ignore
-      { input: [[[0,16,13,0],[0,0,10,12],[0,4,0,14],[0,0,0,0]], 0, 3], output: 23 },
-        //@ts-ignore
-
-      { input: [[[0,10,0],[0,0,5],[0,0,0]], 0, 2], output: 5 }
+      { input: [[[0,16,13,0],[0,0,10,12],[0,4,0,14],[0,0,0,0]], 0, 3], output: 23, hidden: false },
+      { input: [[[0,10,0],[0,0,5],[0,0,0]], 0, 2], output: 5, hidden: false }
     ]
   }
 ];
@@ -403,14 +619,10 @@ export const CodeChallenges = ({ onSelectChallenge, selectedChallengeId }: CodeC
 
   const getPlatformColor = (platform: string) => {
     switch (platform) {
-      case 'LeetCode':
-        return 'text-yellow-500';
-      case 'GeeksforGeeks':
-        return 'text-green-500';
-      case 'CodeChef':
-        return 'text-blue-500';
-      default:
-        return 'text-slate-500';
+      case 'LeetCode': return 'text-yellow-500';
+      case 'GeeksforGeeks': return 'text-green-500';
+      case 'CodeChef': return 'text-blue-500';
+      default: return 'text-slate-500';
     }
   };
 
@@ -424,9 +636,7 @@ export const CodeChallenges = ({ onSelectChallenge, selectedChallengeId }: CodeC
         <button
           onClick={() => setShowPlatformProblems(!showPlatformProblems)}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-            showPlatformProblems
-              ? 'bg-purple-500 text-white'
-              : 'bg-slate-700 hover:bg-slate-600 text-slate-200'
+            showPlatformProblems ? 'bg-purple-500 text-white' : 'bg-slate-700 hover:bg-slate-600 text-slate-200'
           }`}
         >
           {showPlatformProblems ? <Code2 className="h-4 w-4" /> : <BookOpen className="h-4 w-4" />}
@@ -442,9 +652,7 @@ export const CodeChallenges = ({ onSelectChallenge, selectedChallengeId }: CodeC
                 key={category}
                 onClick={() => setSelectedCategory(category)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  selectedCategory === category
-                    ? 'bg-purple-500 text-white'
-                    : 'bg-slate-700 hover:bg-slate-600 text-slate-200'
+                  selectedCategory === category ? 'bg-purple-500 text-white' : 'bg-slate-700 hover:bg-slate-600 text-slate-200'
                 }`}
               >
                 {category}
@@ -464,9 +672,7 @@ export const CodeChallenges = ({ onSelectChallenge, selectedChallengeId }: CodeC
                   setSelectedProblemTitle(challenge.title);
                 }}
                 className={`p-4 rounded-xl cursor-pointer transition-colors duration-200 ${
-                  selectedChallengeId === challenge.id 
-                    ? 'bg-slate-700 border-l-4 border-purple-500' 
-                    : 'bg-slate-800 hover:bg-slate-700/50'
+                  selectedChallengeId === challenge.id ? 'bg-slate-700 border-l-4 border-purple-500' : 'bg-slate-800 hover:bg-slate-700/50'
                 }`}
               >
                 <div className="flex items-center justify-between">
@@ -474,28 +680,18 @@ export const CodeChallenges = ({ onSelectChallenge, selectedChallengeId }: CodeC
                     <h4 className="font-semibold flex items-center gap-2">
                       {challenge.title}
                       {hoveredChallenge === challenge.id && (
-                        <motion.span
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          className="text-xs bg-purple-500/20 px-2 py-1 rounded-full"
-                        >
+                        <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-xs bg-purple-500/20 px-2 py-1 rounded-full">
                           Click to select
                         </motion.span>
                       )}
                     </h4>
                     <p className="text-sm text-slate-400">{challenge.description}</p>
                   </div>
-                  <ChevronRight className={`h-5 w-5 transition-colors ${
-                    selectedChallengeId === challenge.id ? 'text-purple-500' : 'text-slate-400'
-                  }`} />
+                  <ChevronRight className={`h-5 w-5 transition-colors ${selectedChallengeId === challenge.id ? 'text-purple-500' : 'text-slate-400'}`} />
                 </div>
                 <div className="flex items-center gap-3 mt-2">
-                  <span className="text-xs text-purple-400">
-                    {challenge.difficulty}
-                  </span>
-                  <span className="text-xs px-2 py-0.5 rounded-full bg-slate-700 text-slate-300">
-                    {challenge.category}
-                  </span>
+                  <span className="text-xs text-purple-400">{challenge.difficulty}</span>
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-slate-700 text-slate-300">{challenge.category}</span>
                 </div>
               </motion.div>
             ))}
@@ -514,9 +710,7 @@ export const CodeChallenges = ({ onSelectChallenge, selectedChallengeId }: CodeC
               key={title}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className={`p-4 rounded-xl bg-slate-800 ${
-                selectedProblemTitle === title ? 'border-l-4 border-purple-500' : ''
-              }`}
+              className={`p-4 rounded-xl bg-slate-800 ${selectedProblemTitle === title ? 'border-l-4 border-purple-500' : ''}`}
             >
               <h4 className="font-semibold mb-3">{title}</h4>
               <div className="space-y-2">
@@ -529,9 +723,7 @@ export const CodeChallenges = ({ onSelectChallenge, selectedChallengeId }: CodeC
                     className="flex items-center justify-between p-3 rounded-lg bg-slate-700/50 hover:bg-slate-700 transition-colors"
                   >
                     <div className="flex items-center gap-3">
-                      <span className={`text-sm font-medium ${getPlatformColor(problem.platform)}`}>
-                        {problem.platform}
-                      </span>
+                      <span className={`text-sm font-medium ${getPlatformColor(problem.platform)}`}>{problem.platform}</span>
                       <span className="text-sm">{problem.title}</span>
                     </div>
                     <div className="flex items-center gap-2">

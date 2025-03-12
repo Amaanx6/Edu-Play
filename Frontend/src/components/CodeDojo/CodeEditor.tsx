@@ -20,10 +20,12 @@ export const CodeEditor = ({ challenge, onXpGain }: CodeEditorProps) => {
   const [isTyping, setIsTyping] = useState(false);
   const [lastKeystroke, setLastKeystroke] = useState(Date.now());
   const [selectedLanguage, setSelectedLanguage] = useState<Language>('javascript');
+  const [showHiddenTests, setShowHiddenTests] = useState(false);
 
   useEffect(() => {
     setCode(challenge.starterCode[selectedLanguage]);
     setOutput([]);
+    setShowHiddenTests(false);
   }, [challenge, selectedLanguage]);
 
   const executeJavaScript = (code: string, testCase: any) => {
@@ -117,20 +119,40 @@ export const CodeEditor = ({ challenge, onXpGain }: CodeEditorProps) => {
             expected: testCase.output,
             received: result,
             success,
-            index
+            index,
+            hidden: testCase.hidden || false
           };
         } catch (error) {
-          return { error: (error as Error).message, index };
+          return { error: (error as Error).message, index, hidden: testCase.hidden || false };
         }
       });
 
-      setOutput(results.map((res) => 
-        res.success 
-          ? `✅ Test ${res.index + 1} Passed!`
-          : res.error 
-            ? `❌ Test ${res.index + 1} Error: ${res.error}`
-            : `❌ Test ${res.index + 1} Failed\n   Expected: ${JSON.stringify(res.expected)}\n   Received: ${JSON.stringify(res.received)}`
-      ));
+      const allTestsPassed = results.every(res => res.success);
+      setShowHiddenTests(allTestsPassed);
+
+      // Calculate hidden test stats
+      const hiddenTests = results.filter(r => r.hidden);
+      const hiddenPassed = hiddenTests.filter(r => r.success).length;
+      const hiddenFailed = hiddenTests.length - hiddenPassed;
+      const summary = allTestsPassed && hiddenTests.length > 0 
+        ? [`📊 Hidden Test Summary: ${hiddenPassed}/${hiddenTests.length} passed, ${hiddenFailed} failed`]
+        : [];
+
+      setOutput([
+        ...summary,
+        ...results.map((res) => {
+          if (res.hidden && !showHiddenTests) {
+            return `🔒 Hidden Test ${res.index + 1} (Pass all visible tests to reveal)`;
+          }
+
+          const prefix = res.hidden ? '🔓 Hidden Test' : 'Test';
+          return res.success 
+            ? `✅ ${prefix} ${res.index + 1} Passed!\n   Input: ${JSON.stringify(res.input)}\n   Output: ${JSON.stringify(res.received)}`
+            : res.error 
+              ? `❌ ${prefix} ${res.index + 1} Error: ${res.error}`
+              : `❌ ${prefix} ${res.index + 1} Failed\n   Input: ${JSON.stringify(res.input)}\n   Expected: ${JSON.stringify(res.expected)}\n   Received: ${JSON.stringify(res.received)}`;
+        })
+      ]);
     } catch (err) {
       setOutput([`🚨 Runtime Error: ${(err as Error).message}`]);
     }
@@ -238,7 +260,9 @@ export const CodeEditor = ({ challenge, onXpGain }: CodeEditorProps) => {
                   className={`p-3 rounded-lg ${
                     line.startsWith('✅') ? 'bg-green-500/10' :
                     line.startsWith('❌') ? 'bg-red-500/10' :
-                    line.startsWith('⚠️') ? 'bg-yellow-500/10' :
+                    line.startsWith('⚠️') ? 'bg-yellow-500/20' :
+                    line.startsWith('🔒') ? 'bg-slate-700/50' :
+                    line.startsWith('📊') ? 'bg-blue-500/20' :
                     'bg-slate-800'
                   }`}
                 >
