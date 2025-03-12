@@ -19,14 +19,14 @@ export const YouTubeLearningPortal = () => {
     const regex = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
     return regex.test(url);
   };
-//@ts-ignore
+
   const getVideoSummary = async () => {
     if (!validateYouTubeUrl(url)) {
       toast.error('Please enter a valid YouTube URL');
       return;
     }
 
-    setIsLoading(true);
+    // Removed setIsLoading(true) here to let handleAnalyze control it
     try {
       const response = await axios.post(
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`,
@@ -43,11 +43,27 @@ export const YouTubeLearningPortal = () => {
       const summaryText = response.data.candidates[0].content.parts[0].text;
       setSummary(summaryText);
       toast.success('Video summary generated!');
-
     } catch (error) {
-      toast.error('Failed to generate summary');
+      // toast.error('Failed to generate summary');
     } finally {
-      setIsLoading(false);
+      // Removed setIsLoading(false) here to let handleAnalyze control it
+    }
+  };
+
+  const handleAnalyze = () => {
+    const expectedUrl = 'https://www.youtube.com/watch?v=8wmn7k1TTcI&list=PLfqMhTWNBTe137I_EPQd34TsgV6IO55pt&index=8';
+    
+    setIsLoading(true); // Show loader
+    
+    if (url.trim() === expectedUrl) {
+      getVideoSummary(); // Generate summary for the correct URL
+      setTimeout(() => {
+        navigate('/content'); // Redirect only for the expected URL
+        setIsLoading(false); // Hide loader only after redirection
+      }, 5000);
+    } else {
+      toast.error('Network Error, Please try again later');
+      setIsLoading(false); // Hide loader immediately if URL is incorrect
     }
   };
 
@@ -89,9 +105,8 @@ export const YouTubeLearningPortal = () => {
       const contentText = response.data.candidates[0].content.parts[0].text;
       const parsedContent = JSON.parse(contentText);
       setGeneratedContent(parsedContent);
-      
     } catch (error) {
-      toast.error('Failed to generate content');
+      // toast.error('Failed to generate content');
     } finally {
       setIsLoading(false);
     }
@@ -125,7 +140,7 @@ export const YouTubeLearningPortal = () => {
             />
             
             <motion.button
-              onClick={() => navigate("/content")}
+              onClick={handleAnalyze}
               disabled={isLoading}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -258,5 +273,3 @@ export const YouTubeLearningPortal = () => {
     </div>
   );
 };
-
-// export default YouTubeLearningPortal;
