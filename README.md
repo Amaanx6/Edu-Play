@@ -7,7 +7,7 @@ To transform traditional learning into an engaging, interactive, and fun experie
 ---
 
 ## **Features**
-
+ 
 ### **1. InstantQuiz**
 - **Highlight Any Digital Text:** Generate quizzes from PDFs, articles, or textbooks.  
 - **AI-Powered Quiz Generation:** Create MCQs, flashcards, and fill-in-the-blanks instantly.  
