@@ -8,7 +8,7 @@ const materials = [
     title: 'Data Structures & Algorithms',
     icon: <Code className="w-6 h-6" />,
     description: 'Master the fundamentals of DSA with comprehensive guides and examples.',
-    downloadLink: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+    downloadLink: 'https://ggnindia.dronacharya.info/Downloads/Sub-info/RelatedBook/Data-Structure-Algorithms-Text-Book-1.pdf',
     fileName: 'data-structures-algorithms.pdf',
     category: 'dsa'
   },
@@ -17,7 +17,7 @@ const materials = [
     title: 'Operating Systems',
     icon: <Terminal className="w-6 h-6" />,
     description: 'Learn about process management, scheduling, and memory allocation.',
-    downloadLink: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+    downloadLink: 'https://www.cl.cam.ac.uk/teaching/1011/OpSystems/os1a-slides.pdf',
     fileName: 'operating-systems-guide.pdf',
     category: 'os'
   },
@@ -26,7 +26,7 @@ const materials = [
     title: 'Computer Networks',
     icon: <Network className="w-6 h-6" />,
     description: 'Understand networking protocols, architecture, and implementation.',
-    downloadLink: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+    downloadLink: 'https://www.vssut.ac.in/lecture_notes/lecture1423905560.pdf',
     fileName: 'computer-networks.pdf',
     category: 'networks'
   },
@@ -35,7 +35,7 @@ const materials = [
     title: 'Database Management Systems',
     icon: <Database className="w-6 h-6" />,
     description: 'Explore relational databases, SQL, and database design principles.',
-    downloadLink: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+    downloadLink: 'https://mrcet.com/downloads/digital_notes/CSE/II%20Year/DBMS.pdf',
     fileName: 'database-systems.pdf',
     category: 'dbms'
   },
@@ -44,7 +44,7 @@ const materials = [
     title: 'Software Engineering',
     icon: <Book className="w-6 h-6" />,
     description: 'Learn software development lifecycle, design patterns, and best practices.',
-    downloadLink: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+    downloadLink: 'https://www.vssut.ac.in/lecture_notes/lecture1428551142.pdf',
     fileName: 'software-engineering.pdf',
     category: 'se'
   }
