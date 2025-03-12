@@ -47,7 +47,7 @@ const topicProgressData = [
 
 const leaderboardData = [
   { rank: 1, name: 'Sarah Chen', xp: 4850, change: 'up' },
-  { rank: 2, name: 'Alex Johnson', xp: 3750, change: 'same' },
+  { rank: 2, name: 'Kafia', xp: 3750, change: 'same' },
   { rank: 3, name: 'Mike Smith', xp: 3600, change: 'up' },
   { rank: 4, name: 'Emma Davis', xp: 3400, change: 'down' },
   { rank: 5, name: 'James Wilson', xp: 3200, change: 'up' },
@@ -167,7 +167,7 @@ export function StatsCard({
             <div
               key={index}
               className={`p-3 rounded-lg ${
-                player.name === 'Alex Johnson' ? 'bg-purple-500/20' : 'bg-gray-700/30'
+                player.name === 'Kafia' ? 'bg-purple-500/20' : 'bg-gray-700/30'
               }`}
             >
               <div className="flex items-center justify-between">

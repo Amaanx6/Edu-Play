@@ -1,6 +1,7 @@
 import { Award, Star, Code, Brain } from 'lucide-react';
 import { ProfileCard } from './ProfileCard';
 import { StatsCard } from './StatsCard';
+import { Navbar } from '../Navbar';
 
 export function Dashboard() {
   const profileData = {
@@ -61,9 +62,10 @@ export function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gray-900 p-6">
+      <Navbar title='Dashboard' icon={Award}/>
       <div className="max-w-7xl mx-auto space-y-6">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-white">Learning Dashboard</h1>
+          <h1 className="text-3xl font-bold text-white">User Dashboard</h1>
         </div>
         
         <div className="grid grid-cols-1 gap-6">
