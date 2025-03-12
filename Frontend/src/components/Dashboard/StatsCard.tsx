@@ -56,8 +56,8 @@ const leaderboardData = [
 const categoryStats = [
   { category: 'Arrays & Strings', icon: Brackets, solved: 45, total: 60, color: 'text-blue-400' },
   { category: 'Database Design', icon: Database, solved: 28, total: 40, color: 'text-purple-400' },
-  { category: 'UI Components', icon: Layout, solved: 35, total: 50, color: 'text-green-400' },
-  { category: 'Security', icon: Lock, solved: 20, total: 30, color: 'text-red-400' },
+  { category: 'Arrays', icon: Layout, solved: 35, total: 50, color: 'text-green-400' },
+  { category: 'Number Theory', icon: Lock, solved: 20, total: 30, color: 'text-red-400' },
 ];
 
 export function StatsCard({
