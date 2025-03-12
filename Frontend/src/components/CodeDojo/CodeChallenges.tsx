@@ -15,7 +15,9 @@ interface Challenge {
     python: string;
     cpp: string;
   };
-  testCases: { input: any[]; output: any[] }[];
+  testCases: {
+    hidden: boolean; input: any[]; output: any[] 
+}[];
 }
 
 interface PlatformProblem {
@@ -96,10 +98,22 @@ const CODE_CHALLENGES: Challenge[] = [
 }`
     },
     testCases: [
-      { input: [1, 2, 3], output: [3, 2, 1] },
-      { input: [9, 5, 2, 7], output: [7, 2, 5, 9] },
-      { input: [], output: [] },            // Hidden Test Case 1
-      { input: [42], output: [42] }         // Hidden Test Case 2
+      {
+        input: [1, 2, 3], output: [3, 2, 1],
+        hidden: false
+      },
+      {
+        input: [9, 5, 2, 7], output: [7, 2, 5, 9],
+        hidden: false
+      },
+      {
+        input: [], output: [],
+        hidden: false
+      },            // Hidden Test Case 1
+      {
+        input: [42], output: [42],
+        hidden: false
+      }         // Hidden Test Case 2
     ]
   },
   {
@@ -144,8 +158,14 @@ const CODE_CHALLENGES: Challenge[] = [
 }`
     },
     testCases: [
-      { input: [[2, 7, 11, 15], 9], output: [0, 1] },
-      { input: [[3, 2, 4], 6], output: [1, 2] }
+      {
+        input: [[2, 7, 11, 15], 9], output: [0, 1],
+        hidden: false
+      },
+      {
+        input: [[3, 2, 4], 6], output: [1, 2],
+        hidden: false
+      }
     ]
   },
   // Medium Category
@@ -191,8 +211,14 @@ const CODE_CHALLENGES: Challenge[] = [
 }`
     },
     testCases: [
-      { input: [["eat","tea","tan","ate","nat","bat"]], output: [["eat","tea","ate"],["tan","nat"],["bat"]] },
-      { input: [["",""]], output: [["",""]] }
+      {
+        input: [["eat", "tea", "tan", "ate", "nat", "bat"]], output: [["eat", "tea", "ate"], ["tan", "nat"], ["bat"]],
+        hidden: false
+      },
+      {
+        input: [["", ""]], output: [["", ""]],
+        hidden: false
+      }
     ]
   },
   {
@@ -238,8 +264,14 @@ const CODE_CHALLENGES: Challenge[] = [
 }`
     },
     testCases: [
-      { input: [[[1,4,5],[1,3,4],[2,6]]], output: [1,1,2,3,4,4,5,6] },
-      { input: [[]], output: [] }
+      {
+        input: [[[1, 4, 5], [1, 3, 4], [2, 6]]], output: [1, 1, 2, 3, 4, 4, 5, 6],
+        hidden: false
+      },
+      {
+        input: [[]], output: [],
+        hidden: false
+      }
     ]
   },
   {
