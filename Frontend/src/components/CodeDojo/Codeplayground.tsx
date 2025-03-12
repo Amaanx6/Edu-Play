@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Book, Rocket } from 'lucide-react';
+import { Book, Rocket, CodeXml } from 'lucide-react';
 import { Navbar } from '../Navbar';
 import { CodeChallenges, type Challenge } from './CodeChallenges';
 import { CodeEditor } from './CodeEditor';
 import { CodeQuiz } from './CodeQuiz';
+
 
 export const CodePlayground = () => {
   const [selectedChallenge, setSelectedChallenge] = useState<Challenge | null>(null);
@@ -25,7 +26,7 @@ export const CodePlayground = () => {
 
   return (
     <div className="min-h-screen bg-slate-900 text-white p-8">
-      <Navbar title='Code Dojo' icon={Book}/>
+      <Navbar title='Code Dojo' icon={CodeXml}/>
       <motion.div 
         className="max-w-7xl mx-auto space-y-8"
         initial={{ opacity: 0, y: 20 }}

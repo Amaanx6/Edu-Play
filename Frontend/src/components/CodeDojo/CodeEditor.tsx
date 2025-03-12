@@ -28,13 +28,11 @@ export const CodeEditor = ({ challenge, onXpGain }: CodeEditorProps) => {
 
   const executeJavaScript = (code: string, testCase: any) => {
     try {
-      // Create a safe evaluation context that returns the function
       const userFunction = new Function(`
         ${code}
         return reverseArray;
       `)();
       
-      // Execute the function with the test case input
       const result = userFunction([...testCase.input]);
       return result;
     } catch (error) {
@@ -44,7 +42,6 @@ export const CodeEditor = ({ challenge, onXpGain }: CodeEditorProps) => {
 
   const executePython = (code: string, testCase: any) => {
     try {
-      // Convert Python code to JavaScript
       const jsCode = code
         .replace('def reverse_array(arr):', 'function reverseArray(arr) {')
         .replace('    return', '  return')
@@ -52,7 +49,6 @@ export const CodeEditor = ({ challenge, onXpGain }: CodeEditorProps) => {
         .replace('pass', 'return arr.slice().reverse()')
         + '}';
 
-      // Create and execute the converted function
       const userFunction = new Function(`
         ${jsCode}
         return reverseArray;
@@ -66,14 +62,12 @@ export const CodeEditor = ({ challenge, onXpGain }: CodeEditorProps) => {
 
   const executeCpp = (code: string, testCase: any) => {
     try {
-      // Convert C++ code to JavaScript
       const jsCode = code
         .replace(/vector<int>/g, '')
         .replace(/&/g, '')
         .replace('reverseArray(', 'function reverseArray(')
         .replace(/\{[\s\S]*\}/, '{ return arr.slice().reverse(); }');
 
-      // Create and execute the converted function
       const userFunction = new Function(`
         ${jsCode}
         return reverseArray;
@@ -105,7 +99,6 @@ export const CodeEditor = ({ challenge, onXpGain }: CodeEditorProps) => {
               throw new Error('Unsupported language');
           }
 
-          // Deep comparison of arrays
           const arraysEqual = (a: any[], b: any[]) => {
             if (!Array.isArray(a) || !Array.isArray(b)) return false;
             if (a.length !== b.length) return false;
@@ -204,6 +197,8 @@ export const CodeEditor = ({ challenge, onXpGain }: CodeEditorProps) => {
         <textarea
           value={code}
           onChange={handleCodeChange}
+          onPaste={(e) => e.preventDefault()}
+          onCopy={(e) => e.preventDefault()}
           className="w-full h-64 p-4 bg-slate-900 rounded-xl font-mono text-sm resize-none focus:ring-2 focus:ring-blue-500 outline-none"
           placeholder="Implement your solution here..."
           spellCheck="false"
