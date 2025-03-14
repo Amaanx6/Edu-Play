@@ -1,6 +1,6 @@
 import { Hero } from "./Hero";
 import { Footer } from "./Footer";
-import { Team } from "./Team";
+// import { Team } from "./Team";
 import { Features } from "./Features";
 import { Navbar } from "../Navbar";
 import {Home} from 'lucide-react'
@@ -13,7 +13,7 @@ export function MainLanding() {
       </div>
       <Hero />
       <Features />
-      <Team />
+      {/* <Team /> */}
       {/* <Testimonials /> */}
       <Footer />
     </div>
