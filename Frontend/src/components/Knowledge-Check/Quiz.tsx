@@ -177,10 +177,10 @@ const Quiz = () => {
               <h3 className="text-xl text-white mb-4">Performance Analysis</h3>
               <p className="text-gray-300 mb-4">
                 {accuracy >= 80
-                  ? "Excellent performance! You've demonstrated a strong understanding of binary trees."
+                  ? "Excellent performance! You've demonstrated a strong understanding of Array Indexing."
                   : accuracy >= 60
                   ? "Good job! You have a solid grasp of the basics but there's room for improvement."
-                  : "Keep practicing! Focus on understanding the fundamental concepts of binary trees."}
+                  : "Keep practicing! Focus on understanding the fundamental concepts of Array Indexing."}
               </p>
               <div className="space-y-2">
                 {avgTime > 20 && (
