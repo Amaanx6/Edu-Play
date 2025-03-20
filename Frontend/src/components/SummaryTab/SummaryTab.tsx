@@ -12,7 +12,7 @@ import {
   Trophy as TrophyIcon,
   Search
 } from 'lucide-react';
-import { Navbar } from './Navbar';
+import { Navbar } from '../Navbar';
 interface Theory {
   details: string;
   badge: string;
