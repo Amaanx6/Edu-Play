@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { useQuiz } from './QuizContext';
 import { Brain, Timer, Zap, Award, HelpCircle, BarChart, RefreshCw } from 'lucide-react';
-import { questions } from './data/questions';
+import { getQuestions } from './data/questions';
 
 interface QuizResults {
   correctAnswers: number;
@@ -11,7 +11,29 @@ interface QuizResults {
   usedHints: boolean[];
 }
 
+interface QuizQuestions {
+  easy: Array<{
+    question: string;
+    options: string[];
+    correct: number;
+    explanation: string;
+  }>;
+  medium: Array<{
+    question: string;
+    options: string[];
+    correct: number;
+    explanation: string;
+  }>;
+  hard: Array<{
+    question: string;
+    options: string[];
+    correct: number;
+    explanation: string;
+  }>;
+}
+
 const Quiz = () => {
+  const [quizQuestions, setQuizQuestions] = useState<QuizQuestions | null>(null);
   const {
     difficulty,
     score,
@@ -40,15 +62,23 @@ const Quiz = () => {
   });
 
   useEffect(() => {
+    const loadQuestions = async () => {
+      const questions = await getQuestions();
+      setQuizQuestions(questions);
+    };
+    loadQuestions();
+  }, []);
+
+  useEffect(() => {
     if (!showExplanation && timer > 0 && !quizComplete) {
       const countdown = setInterval(() => setTimer(prev => prev - 1), 1000);
       return () => clearInterval(countdown);
     }
   }, [timer, showExplanation, quizComplete]);
 
-  if (!difficulty) return null;
+  if (!difficulty || !quizQuestions) return null;
 
-  const currentQuestionData = questions[difficulty][currentQuestion];
+  const currentQuestionData = quizQuestions[difficulty][currentQuestion];
   const streakBonus = Math.floor(streak / 3) * 10;
 
   const handleAnswer = (index: number) => {
@@ -78,7 +108,7 @@ const Quiz = () => {
   };
 
   const nextQuestion = () => {
-    if (currentQuestion >= questions[difficulty].length - 1) {
+    if (currentQuestion >= quizQuestions[difficulty].length - 1) {
       setQuizComplete(true);
     } else {
       setCurrentQuestion(currentQuestion + 1);
@@ -108,7 +138,7 @@ const Quiz = () => {
   };
 
   const changeDifficulty = () => {
-    setDifficulty(null); // Now valid because setDifficulty accepts Difficulty | null
+    setDifficulty(null);
     restartQuiz();
   };
 
@@ -337,7 +367,7 @@ const Quiz = () => {
                   className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 rounded-lg font-semibold"
                   onClick={nextQuestion}
                 >
-                  {currentQuestion === questions[difficulty].length - 1 ? 'Show Results' : 'Next Question'}
+                  {currentQuestion === quizQuestions[difficulty].length - 1 ? 'Show Results' : 'Next Question'}
                 </motion.button>
               </motion.div>
             )}
