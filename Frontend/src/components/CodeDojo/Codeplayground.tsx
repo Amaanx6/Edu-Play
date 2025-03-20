@@ -9,7 +9,7 @@ import type { Challenge } from './CodeChallenges';
 
 export const CodePlayground = () => {
   const [selectedChallenge, setSelectedChallenge] = useState<Challenge | null>(null);
-  const [xp, setXp] = useState(0);
+  const [xp, setXp] = useState(0); 
   const [videoId, setVideoId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
