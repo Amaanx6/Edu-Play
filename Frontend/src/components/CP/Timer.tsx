@@ -1,9 +1,10 @@
+// Timer.tsx (updated)
 import { useState, useEffect } from 'react';
 import { Timer as TimerIcon, AlertTriangle } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-export const Timer = () => {
-  const [timeLeft, setTimeLeft] = useState(600); // 10 minutes
+export const Timer = ({ initialTime = 600 }: { initialTime?: number }) => {
+  const [timeLeft, setTimeLeft] = useState(initialTime);
   const [isWarning, setIsWarning] = useState(false);
 
   useEffect(() => {

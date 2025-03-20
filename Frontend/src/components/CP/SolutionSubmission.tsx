@@ -1,23 +1,25 @@
+// SolutionSubmission.tsx
 import { useState } from 'react';
 import { LockKeyhole, Zap, CheckCircle, XCircle, Award, TrendingUp, Users, Trophy } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-export const SolutionSubmission = () => {
+export const SolutionSubmission = ({ testCases }: { testCases: any[] }) => {
   const [solution, setSolution] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [result, setResult] = useState<'success' | 'error' | null>(null);
-  const [testCases, setTestCases] = useState([
-    { input: '[1, 2, 2, 3]', expected: '[1, 2, 3]', passed: false },
-    { input: '[5, 4, 3, 3]', expected: '[3, 4, 5]', passed: false },
-    { input: '[7, 1, 7, 2, 3]', expected: '[1, 2, 3, 7]', passed: false },
-  ]);
+  const [solutionTestCases, setSolutionTestCases] = useState(
+    testCases.map(tc => ({
+      input: tc.input,
+      expected: tc.output,
+      passed: false,
+      hidden: tc.hidden
+    }))
+  );
 
   const leaderboard = [
     { rank: 1, name: "AlgoMaster", score: 2850, solved: 42 },
     { rank: 2, name: "CodeNinja", score: 2720, solved: 38 },
     { rank: 3, name: "ByteWarrior", score: 2680, solved: 35 },
-    { rank: 4, name: "DataWizard", score: 2590, solved: 33 },
-    { rank: 5, name: "LogicHunter", score: 2510, solved: 31 }
   ];
 
   const achievements = [
@@ -28,16 +30,14 @@ export const SolutionSubmission = () => {
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
-    // Simulate submission and test cases
     await new Promise(resolve => setTimeout(resolve, 1500));
     
-    // Simulate test results
-    const newTestCases = testCases.map(test => ({
+    const newTestCases = solutionTestCases.map(test => ({
       ...test,
       passed: Math.random() > 0.5,
     }));
     
-    setTestCases(newTestCases);
+    setSolutionTestCases(newTestCases);
     setResult(newTestCases.every(test => test.passed) ? 'success' : 'error');
     setIsSubmitting(false);
   };
@@ -86,7 +86,7 @@ export const SolutionSubmission = () => {
           <div className="space-y-4">
             <h4 className="text-xl font-semibold text-white">Test Cases</h4>
             <div className="grid gap-3">
-              {testCases.map((test, index) => (
+              {solutionTestCases.map((test, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, x: -20 }}
@@ -149,7 +149,6 @@ export const SolutionSubmission = () => {
                     <span className={`text-lg font-semibold ${
                       index === 0 ? 'text-yellow-400' :
                       index === 1 ? 'text-gray-300' :
-                      index === 2 ? 'text-amber-600' :
                       'text-gray-400'
                     }`}>#{user.rank}</span>
                     <div>
