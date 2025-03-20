@@ -13,6 +13,7 @@ import { CompetitiveArena } from './components/CP/CompetativeArena';
 import { Signup } from './components/Auth/Signup';
 import { Login } from './components/Auth/Login';
 import { Dashboard } from './components/Dashboard/Dashboard';
+import { TheoryContent } from './components/Content/TheoryContent';
 
 const App: React.FC = () => {
   return (
@@ -23,8 +24,8 @@ const App: React.FC = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<MainLanding />} />
           <Route path="/input" element={<YouTubeLearningPortal />} />
-          <Route path="/content" element={<SummaryComponent />} />
-          <Route path="/content2" element={<TheoryTab summary={HARDCODED_SUMMARY} />} />
+          <Route path="/content" element={<TheoryContent />} />
+          {/* <Route path="/content2" element={<TheoryTab summary={HARDCODED_SUMMARY} />} /> */}
           <Route path="/code" element={<CodePlayground />} />
           {/* <Route path="/code" element={<CodeTab />} /> */}
           <Route path="/cp" element={<CompetitiveArena />} />

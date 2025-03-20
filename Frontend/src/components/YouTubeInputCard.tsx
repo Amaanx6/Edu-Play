@@ -22,11 +22,11 @@ export const YouTubeLearningPortal = () => {
     let timeoutId: NodeJS.Timeout;
     if (isExtracted) {
       timeoutId = setTimeout(() => {
-        navigate('/content');
-      }, 10000);
+        navigate('/content', { state: { videoId } });
+      }, 3000);
     }
     return () => clearTimeout(timeoutId);
-  }, [isExtracted, navigate]);
+  }, [isExtracted, navigate, videoId]);
 
   const handleAnalyze = () => {
     setIsLoading(true);
@@ -116,7 +116,7 @@ export const YouTubeLearningPortal = () => {
                     {videoId}
                   </code>
                   <p className="text-sm text-gray-400 mt-2">
-                    Redirecting...
+                    Redirecting to content page...
                   </p>
                 </div>
               </motion.div>
