@@ -23,6 +23,7 @@ export const CodeEditor = ({ challenge, onXpGain }: CodeEditorProps) => {
   const [showHiddenTests, setShowHiddenTests] = useState(false);
 
   useEffect(() => {
+    //@ts-ignore
     setCode(challenge.starterCode[selectedLanguage]);
     setOutput([]);
     setShowHiddenTests(false);
@@ -206,6 +207,7 @@ export const CodeEditor = ({ challenge, onXpGain }: CodeEditorProps) => {
             </select>
           </div>
           <button
+          //@ts-ignore
             onClick={() => setCode(challenge.starterCode[selectedLanguage])}
             className="bg-slate-700 px-4 py-2 rounded-lg hover:bg-slate-600 flex items-center gap-2 text-sm transition-colors"
           >

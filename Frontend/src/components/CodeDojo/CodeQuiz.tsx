@@ -1,137 +1,210 @@
-import { motion } from 'framer-motion';
-import { Terminal, CheckCircle, AlertCircle } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { BookOpen, CheckCircle, XCircle, ArrowRight } from 'lucide-react';
 
-interface QuizQuestion {
+interface Quiz {
   question: string;
   options: string[];
-  correct: number;
-  explanation?: string;
+  correctIndex: number;
+  explanation: string;
 }
-
-const CODING_MCQS: QuizQuestion[] = [
-  {
-    question: "Which method adds elements to the end of an array?",
-    options: ["push()", "pop()", "shift()", "unshift()"],
-    correct: 0,
-    explanation: "push() adds one or more elements to the end of an array and returns the new length."
-  },
-  {
-    question: "What's the time complexity of array access by index?",
-    options: ["O(1)", "O(n)", "O(log n)", "O(n²)"],
-    correct: 0,
-    explanation: "Array access by index is constant time O(1) because arrays store elements in contiguous memory locations."
-  },
-  {
-    question: "Which array method creates a new array with the results of calling a function for every array element?",
-    options: ["map()", "filter()", "reduce()", "forEach()"],
-    correct: 0,
-    explanation: "map() creates a new array by transforming every element in an array individually."
-  }
-];
 
 interface CodeQuizProps {
   onXpGain: (amount: number) => void;
 }
 
 export const CodeQuiz = ({ onXpGain }: CodeQuizProps) => {
-  const [answers, setAnswers] = useState<(number | null)[]>(new Array(CODING_MCQS.length).fill(null));
-  const [showExplanations, setShowExplanations] = useState<boolean[]>(new Array(CODING_MCQS.length).fill(false));
+  const [quizzes, setQuizzes] = useState<Quiz[]>([]);
+  const [currentQuizIndex, setCurrentQuizIndex] = useState(0);
+  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
+  const [showExplanation, setShowExplanation] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const checkAnswer = (questionIndex: number, optionIndex: number) => {
-    if (answers[questionIndex] !== null) return; // Prevent changing answer
+  useEffect(() => {
+    const fetchQuizzes = async () => {
+      const videoId = localStorage.getItem('currentVideoId');
+      if (!videoId) {
+        setError('No video ID found in localStorage');
+        setLoading(false);
+        return;
+      }
 
-    const newAnswers = [...answers];
-    newAnswers[questionIndex] = optionIndex;
-    setAnswers(newAnswers);
+      try {
+        setLoading(true);
+        const response = await fetch('http://localhost:3000/coding-challenge', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ videoId })
+        });
 
-    if (CODING_MCQS[questionIndex].correct === optionIndex) {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (!data.quizzes || !Array.isArray(data.quizzes)) {
+          throw new Error('Invalid quizzes data format');
+        }
+
+        setQuizzes(data.quizzes.filter((quiz: any) => 
+          quiz.question && 
+          Array.isArray(quiz.options) && 
+          typeof quiz.correctIndex === 'number'
+        ));
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to fetch quizzes');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchQuizzes();
+  }, []);
+
+  const handleAnswerSelect = (index: number) => {
+    if (selectedAnswer !== null) return;
+    
+    setSelectedAnswer(index);
+    setShowExplanation(true);
+    
+    if (index === quizzes[currentQuizIndex].correctIndex) {
       onXpGain(100);
     }
-
-    // Show explanation after answering
-    const newExplanations = [...showExplanations];
-    newExplanations[questionIndex] = true;
-    setShowExplanations(newExplanations);
   };
-  
-  const getProgress = () => {
-    const answered = answers.filter(a => a !== null).length;
-    const correct = answers.reduce((acc, answer, index) => 
-        //@ts-ignore
-      answer === CODING_MCQS[index].correct ? acc + 1 : acc, 0
+
+  const handleNextQuiz = () => {
+    setSelectedAnswer(null);
+    setShowExplanation(false);
+    setCurrentQuizIndex(prev => Math.min(prev + 1, quizzes.length - 1));
+  };
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center p-8">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 2, repeat: Infinity }}
+          className="h-12 w-12 border-4 border-purple-500 border-t-transparent rounded-full mb-4"
+        />
+        <p className="text-slate-400">Loading quizzes...</p>
+      </div>
     );
-    return { answered, correct, total: CODING_MCQS.length };
-  };
+  }
 
-  const progress = getProgress();
+  if (error) {
+    return (
+      <div className="p-4 bg-red-900/20 border border-red-800/50 rounded-xl">
+        <div className="flex items-center gap-3 text-red-400">
+          <BookOpen className="h-5 w-5 flex-shrink-0" />
+          <div>
+            <h3 className="font-medium">Error loading quizzes:</h3>
+            <p className="text-sm">{error}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (quizzes.length === 0) {
+    return (
+      <div className="p-4 bg-slate-800/50 rounded-xl">
+        <div className="flex items-center gap-3 text-slate-400">
+          <BookOpen className="h-5 w-5" />
+          <p>No quizzes available for this video</p>
+        </div>
+      </div>
+    );
+  }
+
+  const currentQuiz = quizzes[currentQuizIndex];
+  const hasNextQuiz = currentQuizIndex < quizzes.length - 1;
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Terminal className="h-6 w-6 text-green-500" />
-          <h3 className="text-xl font-semibold">Code Knowledge Check</h3>
+        <div className="flex items-center gap-3">
+          <BookOpen className="h-6 w-6 text-purple-500" />
+          <h3 className="text-xl font-semibold">Knowledge Check</h3>
         </div>
-        <div className="text-sm bg-slate-800 px-4 py-2 rounded-full">
-          Progress: {progress.correct}/{progress.total} correct
-        </div>
+        <span className="text-sm text-slate-400">
+          Question {currentQuizIndex + 1} of {quizzes.length}
+        </span>
       </div>
-      
-      {CODING_MCQS.map((mcq, index) => (
-        <motion.div 
-          key={index}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: index * 0.1 }}
-          className="bg-slate-800 p-4 rounded-xl"
-        >
-          <p className="font-medium mb-3 flex items-center gap-2">
-            <span className="bg-slate-700 text-xs px-2 py-1 rounded-full">
-              Question {index + 1}
-            </span>
-            {mcq.question}
-          </p>
-          <div className="grid grid-cols-2 gap-2">
-            {mcq.options.map((option, optIndex) => (
-              <button
-                key={optIndex}
-                onClick={() => checkAnswer(index, optIndex)}
-                disabled={answers[index] !== null}
-                className={`p-2 text-sm rounded-lg flex items-center gap-2 transition-colors ${
-                  answers[index] === optIndex
-                    ? optIndex === mcq.correct 
-                      ? 'bg-green-500/20 border-2 border-green-500' 
-                      : 'bg-red-500/20 border-2 border-red-500'
-                    : answers[index] !== null && optIndex === mcq.correct
-                    ? 'bg-green-500/20 border-2 border-green-500'
-                    : 'bg-slate-700 hover:bg-slate-600 disabled:hover:bg-slate-700'
+
+      <motion.div
+        key={currentQuizIndex}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="bg-slate-800 p-6 rounded-xl shadow-lg"
+      >
+        <h4 className="text-lg font-medium mb-4">{currentQuiz.question}</h4>
+        
+        <div className="space-y-3">
+          {currentQuiz.options.map((option, index) => {
+            const isCorrect = index === currentQuiz.correctIndex;
+            const isSelected = index === selectedAnswer;
+            let bgColor = 'bg-slate-700';
+            
+            if (selectedAnswer !== null) {
+              bgColor = isCorrect 
+                ? 'bg-green-500/20 border-green-500' 
+                : isSelected 
+                  ? 'bg-red-500/20 border-red-500'
+                  : 'bg-slate-800';
+            }
+
+            return (
+              <motion.button
+                key={index}
+                onClick={() => handleAnswerSelect(index)}
+                disabled={selectedAnswer !== null}
+                className={`w-full p-3 rounded-lg text-left transition-all border-2 ${bgColor} ${
+                  selectedAnswer === null ? 'hover:bg-slate-600 cursor-pointer' : 'cursor-default'
                 }`}
+                whileHover={selectedAnswer === null ? { scale: 1.02 } : undefined}
               >
-                {answers[index] === optIndex ? (
-                  optIndex === mcq.correct ? (
-                    <CheckCircle className="h-4 w-4 text-green-500" />
-                  ) : (
-                    <AlertCircle className="h-4 w-4 text-red-500" />
-                  )
-                ) : (
-                  <span className="text-xs opacity-50">{optIndex + 1}.</span>
-                )}
-                {option}
-              </button>
-            ))}
-          </div>
-          {showExplanations[index] && mcq.explanation && (
+                <div className="flex items-center justify-between">
+                  <span>{option}</span>
+                  {selectedAnswer !== null && (
+                    isCorrect ? (
+                      <CheckCircle className="h-5 w-5 text-green-500" />
+                    ) : isSelected ? (
+                      <XCircle className="h-5 w-5 text-red-500" />
+                    ) : null
+                  )}
+                </div>
+              </motion.button>
+            );
+          })}
+        </div>
+
+        <AnimatePresence>
+          {showExplanation && (
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="mt-3 text-sm bg-slate-700/50 p-3 rounded-lg"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="mt-6"
             >
-              <strong className="text-purple-400">Explanation:</strong> {mcq.explanation}
+              <div className="p-4 bg-slate-700/50 rounded-lg border-l-4 border-purple-500">
+                <p className="text-sm text-slate-300 mb-2 font-medium">Explanation:</p>
+                <p className="text-slate-400 text-sm">{currentQuiz.explanation}</p>
+                
+                {hasNextQuiz && (
+                  <button
+                    onClick={handleNextQuiz}
+                    className="mt-4 w-full flex items-center justify-center gap-2 px-4 py-2 bg-purple-500 rounded-lg text-sm hover:bg-purple-600 transition-colors"
+                  >
+                    Next Question
+                    <ArrowRight className="h-4 w-4" />
+                  </button>
+                )}
+              </div>
             </motion.div>
           )}
-        </motion.div>
-      ))}
+        </AnimatePresence>
+      </motion.div>
     </div>
   );
 };

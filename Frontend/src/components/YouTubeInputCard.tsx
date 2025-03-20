@@ -22,6 +22,8 @@ export const YouTubeLearningPortal = () => {
     let timeoutId: NodeJS.Timeout;
     if (isExtracted) {
       timeoutId = setTimeout(() => {
+        // Store in localStorage before navigation
+        localStorage.setItem('currentVideoId', videoId);
         navigate('/content', { state: { videoId } });
       }, 3000);
     }
@@ -43,9 +45,11 @@ export const YouTubeLearningPortal = () => {
         return;
       }
 
+      // Update both state and localStorage
       setVideoId(extractedId);
+      localStorage.setItem('currentVideoId', extractedId);
       setIsExtracted(true);
-      toast.success('Video ID extracted successfully');
+      toast.success('Video ID extracted and stored');
 
     } catch (error) {
       toast.error('Error processing video URL');

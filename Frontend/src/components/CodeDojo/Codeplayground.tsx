@@ -1,20 +1,27 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Book, Rocket, CodeXml } from 'lucide-react';
+import { Book, Rocket, Code as CodeXml } from 'lucide-react';
 import { Navbar } from '../Navbar';
-import { CodeChallenges, type Challenge } from './CodeChallenges';
+import { CodeChallenges } from './CodeChallenges';
 import { CodeEditor } from './CodeEditor';
 import { CodeQuiz } from './CodeQuiz';
-
+import type { Challenge } from './CodeChallenges';
 
 export const CodePlayground = () => {
   const [selectedChallenge, setSelectedChallenge] = useState<Challenge | null>(null);
   const [xp, setXp] = useState(0);
+  const [videoId, setVideoId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const storedVideoId = localStorage.getItem('currentVideoId');
+    if (storedVideoId) setVideoId(storedVideoId);
+    setLoading(false);
+  }, []);
 
   const handleXpGain = (amount: number) => {
     setXp(prev => {
       const newXp = prev + amount;
-      // Animate XP gain
       const xpDisplay = document.getElementById('xp-display');
       if (xpDisplay) {
         xpDisplay.classList.add('scale-110');
@@ -23,6 +30,33 @@ export const CodePlayground = () => {
       return newXp;
     });
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-slate-900">
+        <div className="text-center text-slate-400">
+          <div className="animate-spin mb-4">
+            <CodeXml className="h-12 w-12 mx-auto" />
+          </div>
+          Initializing playground...
+        </div>
+      </div>
+    );
+  }
+
+  if (!videoId) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-slate-900">
+        <div className="text-center text-red-400 max-w-md p-8">
+          <Book className="h-12 w-12 mx-auto mb-4" />
+          <h2 className="text-xl font-semibold mb-2">No Video Selected</h2>
+          <p className="text-slate-300">
+            Please analyze a YouTube video first to access the coding challenges.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-900 text-white p-8">
@@ -34,7 +68,6 @@ export const CodePlayground = () => {
         transition={{ duration: 0.5 }}
       >
         <div className="bg-slate-800/50 p-8 rounded-2xl border border-slate-700 shadow-xl">
-          
           <div className="flex items-center justify-between mb-8">
             <div>
               <h2 className="text-2xl font-bold">Interactive Playground</h2>
@@ -56,10 +89,7 @@ export const CodePlayground = () => {
           <div className="grid xl:grid-cols-2 gap-8">
             <div className="space-y-8">
               <div className="bg-slate-800 p-6 rounded-xl">
-                <CodeChallenges 
-                  onSelectChallenge={setSelectedChallenge}
-                  selectedChallengeId={selectedChallenge?.id ?? 0}
-                />
+                <CodeChallenges onSelectChallenge={setSelectedChallenge} />
               </div>
               <div className="bg-slate-800 p-6 rounded-xl">
                 <CodeQuiz onXpGain={handleXpGain} />
