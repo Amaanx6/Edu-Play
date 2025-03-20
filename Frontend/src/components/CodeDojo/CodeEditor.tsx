@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Terminal, Clipboard, Rocket, Code } from 'lucide-react';
 import { useState, useEffect } from 'react';
+//@ts-ignore
 import type { Challenge, Language } from './CodeChallenges';
 
 interface CodeEditorProps {

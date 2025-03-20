@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Terminal, BookOpen, ChevronRight, AlertCircle } from 'lucide-react';
+import { Terminal, ChevronRight, AlertCircle } from 'lucide-react';
 
 export interface Challenge {
   difficulty: 'Easy' | 'Medium' | 'Hard' | 'CP';
