@@ -60,24 +60,120 @@ const Quiz = () => {
     timePerQuestion: [],
     usedHints: [],
   });
+  const [questionsLoaded, setQuestionsLoaded] = useState(false);
 
   useEffect(() => {
     const loadQuestions = async () => {
       const questions = await getQuestions();
       setQuizQuestions(questions);
+      setQuestionsLoaded(true);
     };
     loadQuestions();
   }, []);
 
   useEffect(() => {
-    if (!showExplanation && timer > 0 && !quizComplete) {
+    if (!showExplanation && timer > 0 && !quizComplete && questionsLoaded) {
       const countdown = setInterval(() => setTimer(prev => prev - 1), 1000);
       return () => clearInterval(countdown);
     }
-  }, [timer, showExplanation, quizComplete]);
+  }, [timer, showExplanation, quizComplete, questionsLoaded]);
 
-  if (!difficulty || !quizQuestions) return null;
+  if (!difficulty) return null;
 
+  if (!questionsLoaded) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-purple-900 via-gray-900 to-black flex items-center justify-center">
+        <div className="text-center space-y-8">
+          <motion.div
+            className="relative w-48 h-48 mx-auto"
+            initial={{ rotate: 0 }}
+            animate={{ rotate: 360 }}
+            transition={{
+              duration: 4,
+              repeat: Infinity,
+              ease: 'linear',
+            }}
+          >
+            <motion.div
+              className="absolute w-full h-full border-4 border-purple-500/30 rounded-full"
+              animate={{
+                scale: [1, 1.2, 1],
+                opacity: [0.8, 0.4, 0.8],
+              }}
+              transition={{
+                duration: 2.5,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+            />
+            
+            {[...Array(12)].map((_, i) => (
+              <motion.span
+                key={i}
+                className="absolute text-purple-400 font-mono font-bold"
+                style={{
+                  left: `${Math.cos((i * 30 * Math.PI) / 180) * 70 + 50}%`,
+                  top: `${Math.sin((i * 30 * Math.PI) / 180) * 70 + 50}%`,
+                  transform: 'translate(-50%, -50%)',
+                }}
+                animate={{
+                  opacity: [0, 1, 0],
+                  scale: [0.8, 1.2, 0.8],
+                }}
+                transition={{
+                  duration: 1.5,
+                  delay: i * 0.1,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                }}
+              >
+                {i % 2 === 0 ? '1' : '0'}
+              </motion.span>
+            ))}
+
+            <motion.div
+              className="absolute inset-0 m-auto w-16 h-16 bg-purple-500 rounded-full"
+              animate={{
+                scale: [1, 1.1, 1],
+                opacity: [0.9, 1, 0.9],
+              }}
+              transition={{
+                duration: 1.5,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+            />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="space-y-4"
+          >
+            <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
+              Assembling Knowledge Matrix
+            </h2>
+            <p className="text-gray-400 text-sm">
+              Loading cognitive patterns for {difficulty} difficulty...
+            </p>
+            <motion.div
+              className="h-1 bg-gray-800 rounded-full w-48 mx-auto overflow-hidden"
+              initial={{ width: 0 }}
+              animate={{ width: '12rem' }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                repeatType: 'reverse',
+              }}
+            >
+              <div className="h-full bg-gradient-to-r from-purple-500 to-pink-500" />
+            </motion.div>
+          </motion.div>
+        </div>
+      </div>
+    );
+  }
+  //@ts-ignore
   const currentQuestionData = quizQuestions[difficulty][currentQuestion];
   const streakBonus = Math.floor(streak / 3) * 10;
 
@@ -108,6 +204,7 @@ const Quiz = () => {
   };
 
   const nextQuestion = () => {
+    //@ts-ignore
     if (currentQuestion >= quizQuestions[difficulty].length - 1) {
       setQuizComplete(true);
     } else {
@@ -348,7 +445,7 @@ const Quiz = () => {
                 Think about the basic properties of binary trees and their structure.
               </motion.div>
             )}
-
+  
             {showExplanation && (
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
@@ -360,13 +457,14 @@ const Quiz = () => {
                   <h3 className="text-xl text-white mb-2">Explanation</h3>
                   <p className="text-gray-300">{currentQuestionData.explanation}</p>
                 </div>
-
+                
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 rounded-lg font-semibold"
                   onClick={nextQuestion}
                 >
+                  {/* @ts-ignore */}
                   {currentQuestion === quizQuestions[difficulty].length - 1 ? 'Show Results' : 'Next Question'}
                 </motion.button>
               </motion.div>
